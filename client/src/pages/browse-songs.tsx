@@ -1,16 +1,14 @@
 import { useState, useEffect } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { SongCard } from "@/components/songs/song-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Loader2, Search, RefreshCw } from "lucide-react";
+import { Loader2, Search } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { Song } from "@shared/schema";
 import { useAuth } from "@/hooks/use-auth";
-import { apiRequest } from "@/lib/queryClient";
-import { useToast } from "@/hooks/use-toast";
 
 export default function BrowseSongs() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -18,7 +16,6 @@ export default function BrowseSongs() {
   const [page, setPage] = useState(1);
   const [location] = useLocation();
   const { user } = useAuth();
-  const { toast } = useToast();
   const ITEMS_PER_PAGE = 9;
   
   // Extract search query from URL if present
@@ -43,28 +40,6 @@ export default function BrowseSongs() {
     queryKey: isSearching 
       ? [`/api/songs/search?q=${encodeURIComponent(searchTerm)}`] 
       : [`/api/songs?limit=${ITEMS_PER_PAGE * page}&offset=0`],
-  });
-  
-  // Mutation for updating translations
-  const updateTranslationsMutation = useMutation({
-    mutationFn: async () => {
-      const response = await apiRequest('POST', '/api/songs/update-translations');
-      return await response.json();
-    },
-    onSuccess: () => {
-      toast({
-        title: "Translations updated",
-        description: "Song titles and artists have been updated with translations.",
-      });
-      refetch();
-    },
-    onError: (error: Error) => {
-      toast({
-        title: "Error updating translations",
-        description: error.message,
-        variant: "destructive"
-      });
-    }
   });
 
   // Filter songs by genre if necessary
@@ -95,20 +70,6 @@ export default function BrowseSongs() {
             <h1 className="text-3xl font-bold text-gray-900 mb-4 md:mb-0">
               {isSearching ? "Search Results" : "Browse Songs"}
             </h1>
-            
-            {/* Admin button - only visible to logged in users */}
-            {user && (
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="flex items-center" 
-                onClick={() => updateTranslationsMutation.mutate()}
-                disabled={updateTranslationsMutation.isPending}
-              >
-                <RefreshCw className={`h-4 w-4 mr-1 ${updateTranslationsMutation.isPending ? 'animate-spin' : ''}`} />
-                {updateTranslationsMutation.isPending ? 'Updating...' : 'Update Translations'}
-              </Button>
-            )}
           </div>
           
           {/* Search form */}
