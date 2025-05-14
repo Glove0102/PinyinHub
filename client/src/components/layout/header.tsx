@@ -8,7 +8,8 @@ import { Link, useLocation } from "wouter";
 export function Header() {
   const { user, logoutMutation } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [location] = useLocation();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [location, setLocation] = useLocation();
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -42,16 +43,21 @@ export function Header() {
           
           {/* Search bar */}
           <div className="hidden md:block flex-1 max-w-md mx-auto">
-            <div className="relative text-gray-500 focus-within:text-gray-900">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search className="h-4 w-4" />
+            <form action="/browse" method="get">
+              <div className="relative text-gray-500 focus-within:text-gray-900">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Search className="h-4 w-4" />
+                </div>
+                <Input 
+                  type="text"
+                  name="search"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md" 
+                  placeholder="Search songs or artists..."
+                />
               </div>
-              <Input 
-                type="text" 
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md" 
-                placeholder="Search songs or artists..."
-              />
-            </div>
+            </form>
           </div>
           
           {/* User account and actions */}
@@ -167,14 +173,19 @@ export function Header() {
           
           {/* Mobile search */}
           <div className="relative text-gray-500 focus-within:text-gray-900 mt-2">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-4 w-4" />
-            </div>
-            <Input 
-              type="text" 
-              className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md" 
-              placeholder="Search songs or artists..."
-            />
+            <form action="/browse" method="get">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search className="h-4 w-4" />
+              </div>
+              <Input 
+                type="text"
+                name="search" 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md" 
+                placeholder="Search songs or artists..."
+              />
+            </form>
           </div>
         </div>
       )}

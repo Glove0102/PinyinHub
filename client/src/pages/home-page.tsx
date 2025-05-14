@@ -138,7 +138,10 @@ export default function HomePage() {
                     <p className="text-gray-700">{featuredSong[0].artistChinese || featuredSong[0].artist}</p>
                   </div>
                   
-                  <SongTabs song={featuredSong[0]} />
+                  {/* Limit display height with max-h-60 and add overflow-y-auto for scrolling if needed */}
+                  <div className="max-h-60 overflow-y-auto">
+                    <SongTabs song={featuredSong[0]} />
+                  </div>
                   
                   <div className="mt-6 flex justify-between items-center">
                     <Button variant="ghost" size="sm" className="text-gray-600 hover:text-primary">

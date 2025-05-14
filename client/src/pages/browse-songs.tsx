@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
@@ -6,14 +6,24 @@ import { SongCard } from "@/components/songs/song-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Loader2, Search } from "lucide-react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Song } from "@shared/schema";
 
 export default function BrowseSongs() {
   const [searchTerm, setSearchTerm] = useState("");
   const [genreFilter, setGenreFilter] = useState<string>("all");
   const [page, setPage] = useState(1);
+  const [location] = useLocation();
   const ITEMS_PER_PAGE = 9;
+  
+  // Extract search query from URL if present
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const searchParam = url.searchParams.get('search');
+    if (searchParam) {
+      setSearchTerm(searchParam);
+    }
+  }, [location]);
 
   // Determine if we're searching or browsing
   const isSearching = searchTerm.trim().length > 0;
