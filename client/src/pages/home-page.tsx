@@ -138,7 +138,7 @@ export default function HomePage() {
                     <p className="text-gray-700">{featuredSong[0].artistChinese || featuredSong[0].artist}</p>
                   </div>
                   
-                  <SongTabs song={featuredSong[0]} isPreview={true} />
+                  <SongTabs song={featuredSong[0]} />
                   
                   <div className="mt-6 flex justify-between items-center">
                     <Button variant="ghost" size="sm" className="text-gray-600 hover:text-primary">
