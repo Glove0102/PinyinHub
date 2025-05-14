@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./auth";
-import { insertSongSchema } from "@shared/schema";
+import { insertSongSchema, Song } from "@shared/schema";
 import { processChineseLyrics, getBidirectionalTranslation } from "./openai";
 import { z } from "zod";
 
@@ -118,6 +118,61 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(songs);
     } catch (error) {
       res.status(500).json({ message: "Error fetching user songs" });
+    }
+  });
+  
+  // Update existing songs with bilingual translations
+  app.post("/api/songs/update-translations", isAuthenticated, async (req, res) => {
+    try {
+      // Get all songs
+      const songs = await storage.getSongs(100, 0);
+      
+      // Process each song that needs translation
+      const results = [];
+      
+      for (const song of songs) {
+        // Skip if both title and artist already have translations
+        if (
+          (song.titleChinese && song.title !== song.titleChinese) && 
+          (song.artistChinese && song.artist !== song.artistChinese)
+        ) {
+          continue;
+        }
+        
+        // Get translations
+        const translations = await getBidirectionalTranslation(
+          song.title,
+          song.artist
+        );
+        
+        // Update fields that need translation
+        const updates: Partial<Song> = {};
+        
+        if (!song.titleChinese && translations.titleChinese) {
+          updates.titleChinese = translations.titleChinese;
+        }
+        
+        if (!song.artistChinese && translations.artistChinese) {
+          updates.artistChinese = translations.artistChinese;
+        }
+        
+        // Skip if no updates needed
+        if (Object.keys(updates).length === 0) {
+          continue;
+        }
+        
+        // Update the song
+        const updatedSong = await storage.updateSong(song.id, updates);
+        results.push(updatedSong);
+      }
+      
+      res.json({ 
+        message: `Updated ${results.length} songs with bilingual translations`, 
+        updatedSongs: results 
+      });
+    } catch (error) {
+      console.error("Error updating translations:", error);
+      res.status(500).json({ message: "Error updating translations" });
     }
   });
 

@@ -30,15 +30,23 @@ export function SongCard({ song }: SongCardProps) {
         />
       </div>
       <CardContent className="p-5">
+        {/* Display Chinese title with English below if available */}
         <h3 className="text-lg font-bold text-gray-900 mb-1">
           {song.titleChinese || song.title}
         </h3>
-        <p className="text-sm text-primary-600 mb-2">
+        {(song.titleChinese && song.title && song.title !== song.titleChinese) && (
+          <p className="text-sm text-gray-500 mb-2">
+            {song.title}
+          </p>
+        )}
+        
+        {/* Display Chinese artist with English below if available */}
+        <p className="text-sm text-primary-600 mb-1">
           {song.artistChinese || song.artist}
         </p>
-        {(song.titleChinese && song.title !== song.titleChinese) && (
-          <p className="text-sm text-gray-500 mb-3">
-            {song.title}
+        {(song.artistChinese && song.artist && song.artist !== song.artistChinese) && (
+          <p className="text-xs text-gray-500 mb-2">
+            {song.artist}
           </p>
         )}
         <div className="flex justify-between items-center">
