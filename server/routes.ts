@@ -78,20 +78,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
         userId: (req.user as Express.User).id
       });
       
-      // Get bidirectional translations for title and artist if needed
+      // Always get bidirectional translations for title and artist
       const translations = await getBidirectionalTranslation(
         songData.title,
         songData.artist
       );
       
-      // Apply translations
-      if (translations.titleChinese && !songData.titleChinese) {
+      // Always apply translations to ensure we have both languages
+      // For Chinese title
+      if (translations.titleChinese) {
         songData.titleChinese = translations.titleChinese;
       }
       
-      if (translations.artistChinese && !songData.artistChinese) {
+      // For English title
+      if (translations.titleEnglish && (!songData.title || songData.title === songData.titleChinese)) {
+        songData.title = translations.titleEnglish;
+      }
+      
+      // For Chinese artist
+      if (translations.artistChinese) {
         songData.artistChinese = translations.artistChinese;
       }
+      
+      // For English artist
+      if (translations.artistEnglish && (!songData.artist || songData.artist === songData.artistChinese)) {
+        songData.artist = translations.artistEnglish;
+      }
+      
+      // Log the translations
+      console.log("Applied translations:", JSON.stringify({
+        original: { title: songData.title, artist: songData.artist },
+        translations,
+        final: { 
+          title: songData.title, 
+          titleChinese: songData.titleChinese,
+          artist: songData.artist,
+          artistChinese: songData.artistChinese
+        }
+      }, null, 2));
       
       // Create song record
       const song = await storage.createSong(songData);

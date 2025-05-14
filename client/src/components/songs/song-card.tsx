@@ -42,25 +42,28 @@ export function SongCard({ song }: SongCardProps) {
         />
       </div>
       <CardContent className="p-5">
-        {/* Display Chinese title with English below if available */}
-        <h3 className="text-lg font-bold text-gray-900 mb-1">
-          {showChineseTitle || song.title}
-        </h3>
-        {showEnglishTitle && (
-          <p className="text-sm text-gray-500 mb-2">
-            {showEnglishTitle}
-          </p>
+        {/* Display Chinese title with English below */}
+        {song.titleChinese && (
+          <h3 className="text-lg font-bold text-gray-900 mb-1">
+            {song.titleChinese}
+          </h3>
         )}
-        
-        {/* Display Chinese artist with English below if available */}
-        <p className="text-sm text-primary-600 mb-1">
-          {showChineseArtist || song.artist}
+        {/* Always show English title */}
+        <p className={`text-sm ${song.titleChinese ? 'text-gray-500' : 'font-bold text-gray-900'} mb-2`}>
+          {song.title}
         </p>
-        {showEnglishArtist && (
-          <p className="text-xs text-gray-500 mb-2">
-            {showEnglishArtist}
+        
+        {/* Display Chinese artist with English below */}
+        {song.artistChinese && (
+          <p className="text-sm text-primary-600 mb-1">
+            {song.artistChinese}
           </p>
         )}
+        {/* Always show English artist */}
+        <p className={`text-xs ${song.artistChinese ? 'text-gray-500' : 'text-primary-600'} mb-2`}>
+          {song.artist}
+        </p>
+        
         <div className="flex justify-between items-center">
           <span className="text-xs text-gray-500 flex items-center">
             <Eye className="h-3 w-3 mr-1" /> {song.views || 0} views
