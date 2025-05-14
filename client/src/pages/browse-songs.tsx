@@ -48,9 +48,8 @@ export default function BrowseSongs() {
   // Mutation for updating translations
   const updateTranslationsMutation = useMutation({
     mutationFn: async () => {
-      return apiRequest('/api/songs/update-translations', {
-        method: 'POST'
-      });
+      const response = await apiRequest('POST', '/api/songs/update-translations');
+      return await response.json();
     },
     onSuccess: () => {
       toast({
