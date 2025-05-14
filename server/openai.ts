@@ -103,9 +103,15 @@ export async function getBidirectionalTranslation(
           role: "system",
           content: 
             "You are a music translator who can identify if text is in Chinese or English " +
-            "and provide translations in the other language. Return a JSON object with these fields: " +
-            "titleChinese, titleEnglish, artistChinese, artistEnglish. Only fill the fields that are appropriate " +
-            "based on the input language. For example, if the title is already in Chinese, provide titleEnglish but not titleChinese."
+            "and provide translations in the other language. Return a JSON object with ALL of these fields: " +
+            "titleChinese, titleEnglish, artistChinese, artistEnglish. " +
+            "IMPORTANT: Always return BOTH Chinese and English versions for BOTH title and artist, " +
+            "regardless of the input language. If the input is already in one language, " +
+            "translate it to the other, but always include both versions in your response. " +
+            "If a title or artist is already in Chinese, still return it in titleChinese/artistChinese " +
+            "AND provide the English translation in titleEnglish/artistEnglish. " +
+            "Similarly, if a title or artist is in English, still return it in titleEnglish/artistEnglish " +
+            "AND provide the Chinese translation in titleChinese/artistChinese."
         },
         {
           role: "user",
