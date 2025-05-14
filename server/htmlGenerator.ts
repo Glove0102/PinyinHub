@@ -8,25 +8,39 @@ import { Song } from '@shared/schema';
  * @returns The path to the generated HTML file
  */
 export async function generateSongHtml(song: Song): Promise<string> {
-  // Create a clean URL-friendly slug
-  const slug = createSlug(song.id, song.title, song.titleChinese);
-  
-  // Format the song data for the HTML
-  const formattedSong = formatSongData(song);
-  
-  // Generate HTML content
-  const htmlContent = generateSongHtmlContent(formattedSong);
-  
-  // Ensure the directory exists
-  const dirPath = path.join(process.cwd(), 'public', 'songs');
-  await fs.mkdir(dirPath, { recursive: true });
-  
-  // Write the HTML file
-  const filePath = path.join(dirPath, `${slug}.html`);
-  await fs.writeFile(filePath, htmlContent, 'utf-8');
-  
-  // Return the path to access the file
-  return `/songs/${slug}.html`;
+  try {
+    console.log('Starting HTML generation for song:', song.id);
+    
+    // Create a clean URL-friendly slug
+    const slug = createSlug(song.id, song.title, song.titleChinese);
+    console.log('Generated slug:', slug);
+    
+    // Format the song data for the HTML
+    const formattedSong = formatSongData(song);
+    
+    // Generate HTML content
+    const htmlContent = generateSongHtmlContent(formattedSong);
+    console.log('Generated HTML content, length:', htmlContent.length);
+    
+    // Ensure the directory exists
+    const dirPath = path.join(process.cwd(), 'public', 'songs');
+    console.log('Directory path:', dirPath);
+    await fs.mkdir(dirPath, { recursive: true });
+    
+    // Write the HTML file
+    const filePath = path.join(dirPath, `${slug}.html`);
+    console.log('Writing HTML file to:', filePath);
+    await fs.writeFile(filePath, htmlContent, 'utf-8');
+    console.log('Successfully wrote HTML file');
+    
+    // Return the path to access the file
+    const urlPath = `/songs/${slug}.html`;
+    console.log('HTML URL path:', urlPath);
+    return urlPath;
+  } catch (error) {
+    console.error('Error generating HTML for song:', song.id, error);
+    throw error;
+  }
 }
 
 /**
@@ -60,14 +74,14 @@ function formatSongData(song: Song) {
   const secondaryArtist = song.artistChinese && song.artist !== song.artistChinese ? song.artist : null;
   
   // Format pinyin lines for HTML display
-  const formattedPinyinLyrics = song.pinyinLyrics ? 
-    song.pinyinLyrics.map(line => ({
+  const formattedPinyinLyrics = song.pinyinLyrics && Array.isArray(song.pinyinLyrics) ? 
+    song.pinyinLyrics.map((line: {pinyin: string, chinese: string}) => ({
       pinyin: line.pinyin,
       chinese: line.chinese
     })) : [];
   
   // Format English lyrics for HTML display
-  const formattedEnglishLyrics = song.englishLyrics || [];
+  const formattedEnglishLyrics = song.englishLyrics && Array.isArray(song.englishLyrics) ? song.englishLyrics : [];
   
   return {
     id: song.id,
@@ -240,7 +254,7 @@ function generateSongHtmlContent(song: any): string {
     <div class="section">
       <h2 class="section-title">Lyrics with Pinyin</h2>
       <div class="lyrics-container">
-        ${song.pinyinLyrics.map(line => `
+        ${song.pinyinLyrics.map((line: {pinyin: string, chinese: string}) => `
         <div class="lyrics-line">
           <div class="pinyin">${line.pinyin}</div>
           <div class="chinese">${line.chinese}</div>
@@ -252,7 +266,7 @@ function generateSongHtmlContent(song: any): string {
     <div class="section">
       <h2 class="section-title">English Translation</h2>
       <div class="lyrics-container">
-        ${song.englishLyrics.map(line => `
+        ${song.englishLyrics.map((line: string) => `
         <div class="english">${line}</div>
         `).join('')}
       </div>

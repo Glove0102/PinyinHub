@@ -103,7 +103,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
         englishLyrics: processedLyrics.englishLyrics
       });
       
-      res.status(201).json(updatedSong);
+      // Generate static HTML page for SEO
+      if (updatedSong) {
+        try {
+          const htmlPath = await generateSongHtml(updatedSong);
+          console.log(`Generated static HTML for song ${updatedSong.id} at ${htmlPath}`);
+          
+          // Add the HTML path to the response data
+          const responseData = {
+            ...updatedSong,
+            htmlPath
+          };
+          
+          res.status(201).json(responseData);
+        } catch (htmlError) {
+          console.error("Error generating static HTML:", htmlError);
+          // Still return the song data even if HTML generation fails
+          res.status(201).json(updatedSong);
+        }
+      } else {
+        res.status(201).json(updatedSong);
+      }
     } catch (error) {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: "Invalid song data", errors: error.errors });
@@ -159,6 +179,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // Only update if there are changes to make
           if (Object.keys(updates).length > 0) {
             const updatedSong = await storage.updateSong(song.id, updates);
+            
+            // If song was updated and has complete information, update its HTML page
+            if (updatedSong && updatedSong.pinyinLyrics && updatedSong.englishLyrics) {
+              try {
+                await updateSongHtml(updatedSong);
+                console.log(`Updated static HTML for song ${updatedSong.id}`);
+              } catch (htmlError) {
+                console.error(`Error updating HTML for song ${updatedSong.id}:`, htmlError);
+              }
+            }
+            
             results.push(updatedSong);
           }
         }
