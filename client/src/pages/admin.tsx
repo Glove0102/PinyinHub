@@ -17,9 +17,9 @@ export default function AdminPage() {
     );
   }
 
-  // Only authenticated users can access admin page
-  if (!user) {
-    return <Redirect to="/auth" />;
+  // Only authenticate users with username 'glove' can access admin page
+  if (!user || user.username !== 'glove') {
+    return <Redirect to="/" />;
   }
 
   return (
