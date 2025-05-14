@@ -35,7 +35,7 @@ export default function HomePage() {
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight mb-4">
                 Learn Chinese Through Music
               </h1>
-              <p className="text-lg text-primary-100 max-w-2xl mx-auto mb-8">
+              <p className="text-lg text-white max-w-2xl mx-auto mb-8">
                 PinyinHub helps you understand Chinese songs with pinyin transliteration and English translations
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
