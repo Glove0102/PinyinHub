@@ -3,6 +3,19 @@ import path from 'path';
 import { Song } from '@shared/schema';
 
 /**
+ * Get a background image based on song ID
+ */
+export function getBackgroundImage(id: number): string {
+  const images = [
+    "https://images.unsplash.com/photo-1516280440614-37939bbacd81?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
+    "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
+    "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
+    "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=1000"
+  ];
+  return images[id % images.length];
+}
+
+/**
  * Generates SEO-friendly static HTML for a song
  * @param song The song data
  * @returns The path to the generated HTML file
@@ -210,130 +223,438 @@ function generateSongHtmlContent(song: any): string {
   <link rel="canonical" href="https://pinyinhub.replit.app/songs/${song.id}">
   
   <style>
+    /* Base styles */
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       line-height: 1.6;
       color: #333;
-      max-width: 800px;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f7;
+    }
+    
+    /* Layout */
+    .container {
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 20px;
+      padding: 0 16px;
     }
-    header {
-      text-align: center;
-      border-bottom: 1px solid #eee;
-      padding-bottom: 20px;
-      margin-bottom: 30px;
+    
+    .header {
+      background-color: #fff;
+      padding: 16px 0;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
-    h1 {
-      margin-bottom: 5px;
+    
+    .header-content {
+      display: flex;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      color: #111;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+    
+    .logo svg {
+      width: 32px;
+      height: 32px;
+      margin-right: 8px;
       color: #2563eb;
     }
-    .subtitle {
-      color: #4b5563;
-      font-size: 1.2rem;
-      margin-top: 0;
+    
+    .main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 16px;
     }
-    .artist {
+    
+    .footer {
+      background-color: #fff;
+      padding: 16px 0;
+      box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.1);
+      margin-top: 32px;
+      text-align: center;
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+    
+    /* Song header section */
+    .back-button {
+      margin-bottom: 24px;
+      display: inline-block;
+      padding: 8px 12px;
+      font-size: 0.875rem;
+      color: #4b5563;
+      background-color: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    
+    .back-button:hover {
+      background-color: #f9fafb;
+    }
+    
+    .song-header {
+      background-color: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      margin-bottom: 32px;
+    }
+    
+    .song-cover {
+      position: relative;
+      height: 320px;
+      overflow: hidden;
+    }
+    
+    .song-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .song-cover-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.5) 50%, transparent 100%);
+    }
+    
+    .song-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 32px;
+      color: #fff;
+    }
+    
+    .song-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    
+    .song-title-secondary {
+      font-size: 1.5rem;
+      color: #e5e7eb;
+      margin-bottom: 8px;
+    }
+    
+    .song-artist {
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: #d1d5db;
+      margin-bottom: 4px;
+    }
+    
+    .song-artist-secondary {
+      font-size: 1rem;
+      color: #9ca3af;
+    }
+    
+    .song-meta {
+      display: flex;
+      align-items: center;
+      margin-top: 16px;
+    }
+    
+    .song-genre {
+      background-color: rgba(37, 99, 235, 0.8);
+      color: #fff;
+      font-size: 0.75rem;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+    
+    .song-views {
+      margin-left: 16px;
+      font-size: 0.875rem;
+      color: #d1d5db;
+    }
+    
+    /* Song content section */
+    .song-content {
+      background-color: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      padding: 24px 32px 32px;
+    }
+    
+    /* Tabs */
+    .tabs {
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      margin-bottom: 24px;
+    }
+    
+    .tab {
+      padding: 8px 0;
+      margin-right: 24px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #6b7280;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+    }
+    
+    .tab.active {
+      color: #2563eb;
+      border-color: #2563eb;
+    }
+    
+    /* Lyrics content */
+    .tab-content {
+      padding-top: 16px;
+    }
+    
+    .lyrics-text .pinyin {
+      color: #4b5563;
+      display: block;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    
+    .lyrics-text .chinese {
       font-size: 1.1rem;
-      color: #4b5563;
+      line-height: 1.5;
+      display: block;
+      margin-bottom: 16px;
     }
-    .section {
-      margin-bottom: 30px;
-    }
-    .section-title {
-      font-size: 1.2rem;
-      margin-bottom: 15px;
-      font-weight: bold;
-      color: #1f2937;
-    }
-    .lyrics-container {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-    .lyrics-line {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-    .pinyin {
-      color: #4b5563;
-    }
-    .chinese {
-      font-size: 1.2rem;
-    }
-    .english {
+    
+    .lyrics-text .english {
       color: #6b7280;
       font-style: italic;
+      line-height: 1.5;
+      margin-bottom: 16px;
     }
+    
+    /* Actions section */
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 32px;
+    }
+    
+    .favorite-button {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      font-size: 0.875rem;
+      color: #4b5563;
+      background-color: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    
+    .favorite-button svg {
+      width: 16px;
+      height: 16px;
+      margin-right: 4px;
+    }
+    
+    .date-added {
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+    
+    /* App link */
     .app-link {
       display: block;
       text-align: center;
-      margin-top: 40px;
-      padding: 15px;
+      margin: 32px auto;
+      max-width: 300px;
+      padding: 16px;
       background-color: #2563eb;
       color: white;
       text-decoration: none;
-      border-radius: 5px;
-      font-weight: bold;
+      border-radius: 8px;
+      font-weight: 600;
+      box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+      transition: all 0.2s;
     }
-    .metadata {
-      font-size: 0.8rem;
-      color: #6b7280;
-      margin-top: 30px;
-      text-align: center;
+    
+    .app-link:hover {
+      background-color: #1d4ed8;
+      box-shadow: 0 6px 10px -1px rgba(37, 99, 235, 0.3);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .song-cover {
+        height: 240px;
+      }
+      
+      .song-title {
+        font-size: 1.5rem;
+      }
+      
+      .song-title-secondary {
+        font-size: 1.25rem;
+      }
+      
+      .song-content {
+        padding: 16px 24px 24px;
+      }
+    }
+    
+    /* Side-by-side layout for English/Chinese tab */
+    .columns {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    
+    @media (min-width: 768px) {
+      .columns {
+        grid-template-columns: 1fr 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>${song.primaryTitle}</h1>
-    ${song.secondaryTitle ? `<p class="subtitle">${song.secondaryTitle}</p>` : ''}
-    <p class="artist">
-      ${song.primaryArtist}
-      ${song.secondaryArtist ? ` (${song.secondaryArtist})` : ''}
-    </p>
-  </header>
+  <div class="header">
+    <div class="header-content">
+      <a href="https://pinyinhub.replit.app" class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 8l5 3l5 -3l5 3v6l-5 3l-5 -3l-5 3v-6l5 -3z"></path>
+          <path d="M10 6l5 -3l5 3"></path>
+        </svg>
+        <span>PinyinHub</span>
+      </a>
+    </div>
+  </div>
   
-  <main>
-    <div class="section">
-      <h2 class="section-title">Lyrics with Pinyin</h2>
-      <div class="lyrics-container">
-        ${song.pinyinLyrics.map((line: {pinyin: string, chinese: string}) => `
-        <div class="lyrics-line">
-          <div class="pinyin">${line.pinyin}</div>
-          <div class="chinese">${line.chinese}</div>
+  <div class="main">
+    <a href="https://pinyinhub.replit.app/browse" class="back-button">
+      ← Back to songs
+    </a>
+    
+    <!-- Song header -->
+    <div class="song-header">
+      <div class="song-cover">
+        <img src="${getBackgroundImage(song.id)}" alt="${song.primaryTitle} by ${song.primaryArtist}">
+        <div class="song-cover-overlay"></div>
+        <div class="song-info">
+          <h1 class="song-title">${song.primaryTitle}</h1>
+          ${song.secondaryTitle ? `<p class="song-title-secondary">${song.secondaryTitle}</p>` : ''}
+          <p class="song-artist">${song.primaryArtist}</p>
+          ${song.secondaryArtist ? `<p class="song-artist-secondary">${song.secondaryArtist}</p>` : ''}
+          <div class="song-meta">
+            <span class="song-genre">${song.genre || 'Chinese Music'}</span>
+            <span class="song-views">${song.views || 0} views</span>
+          </div>
         </div>
-        `).join('')}
       </div>
     </div>
     
-    <div class="section">
-      <h2 class="section-title">English Translation</h2>
-      <div class="lyrics-container">
-        ${song.englishLyrics.map((line: string) => `
-        <div class="english">${line}</div>
+    <!-- Song content with tabs -->
+    <div class="song-content">
+      <div class="tabs">
+        <div class="tab active" id="tab-pinyin">Pinyin</div>
+        <div class="tab" id="tab-chinese">简体</div>
+        <div class="tab" id="tab-english">English/Chinese</div>
+      </div>
+      
+      <!-- Pinyin tab content -->
+      <div class="tab-content lyrics-text" id="content-pinyin">
+        ${song.pinyinLyrics.map((line: {pinyin: string, chinese: string}) => `
+        <div>
+          <span class="pinyin">${line.pinyin}</span>
+          <span class="chinese">${line.chinese}</span>
+        </div>
         `).join('')}
+      </div>
+      
+      <!-- Chinese tab content (hidden by default) -->
+      <div class="tab-content lyrics-text" id="content-chinese" style="display: none;">
+        ${song.simplifiedLyrics.split('\n').map((line: string) => `
+        <p class="chinese">${line}</p>
+        `).join('')}
+      </div>
+      
+      <!-- English/Chinese tab content (hidden by default) -->
+      <div class="tab-content lyrics-text" id="content-english" style="display: none;">
+        <div class="columns">
+          <div>
+            ${song.simplifiedLyrics.split('\n').map((line: string) => `
+            <p class="chinese">${line}</p>
+            `).join('')}
+          </div>
+          <div>
+            ${song.englishLyrics.map((line: string) => `
+            <p class="english">${line}</p>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+      
+      <!-- Actions -->
+      <div class="actions">
+        <a href="https://pinyinhub.replit.app/songs/${song.id}" class="favorite-button">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+          </svg>
+          Favorite
+        </a>
+        <div class="date-added">
+          Added on ${new Date(song.createdAt).toLocaleDateString()}
+        </div>
       </div>
     </div>
     
     <a href="https://pinyinhub.replit.app/songs/${song.id}" class="app-link">
       View This Song in the PinyinHub App
     </a>
-  </main>
+  </div>
   
-  <footer>
-    <p class="metadata">
-      Added on ${new Date(song.createdAt).toLocaleDateString()} | 
-      Views: ${song.views} | 
-      Genre: ${song.genre || 'Chinese Music'}
-    </p>
-  </footer>
+  <div class="footer">
+    <p>© ${new Date().getFullYear()} PinyinHub - Learn Chinese Through Music</p>
+  </div>
   
   <!-- Hidden lyrics content for search engines -->
   <div style="display:none" aria-hidden="true">
     ${lyricsPreview}
   </div>
+  
+  <!-- Simple tab switching script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const tabs = document.querySelectorAll('.tab');
+      const contents = document.querySelectorAll('.tab-content');
+      
+      tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          // Remove active class from all tabs
+          tabs.forEach(t => t.classList.remove('active'));
+          // Add active class to clicked tab
+          this.classList.add('active');
+          
+          // Hide all tab contents
+          contents.forEach(content => content.style.display = 'none');
+          
+          // Show the corresponding content
+          const contentId = 'content-' + this.id.split('-')[1];
+          document.getElementById(contentId).style.display = 'block';
+        });
+      });
+    });
+  </script>
 </body>
 </html>`;
 }
