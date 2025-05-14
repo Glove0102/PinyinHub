@@ -5,6 +5,7 @@ import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./auth";
 import { insertSongSchema, Song } from "@shared/schema";
 import { processChineseLyrics, getBidirectionalTranslation } from "./openai";
+import { generateSongHtml, updateSongHtml } from "./htmlGenerator";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
