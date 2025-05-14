@@ -20,6 +20,18 @@ export function SongCard({ song }: SongCardProps) {
     return images[index % images.length];
   };
 
+  // Determine what to display for title (always show both if available)
+  const showChineseTitle = song.titleChinese || "";
+  const showEnglishTitle = (song.titleChinese && song.title && song.title !== song.titleChinese) 
+    ? song.title 
+    : "";
+
+  // Determine what to display for artist (always show both if available)
+  const showChineseArtist = song.artistChinese || "";
+  const showEnglishArtist = (song.artistChinese && song.artist && song.artist !== song.artistChinese)
+    ? song.artist
+    : "";
+
   return (
     <Card className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
       <div className="h-48 overflow-hidden">
@@ -32,21 +44,21 @@ export function SongCard({ song }: SongCardProps) {
       <CardContent className="p-5">
         {/* Display Chinese title with English below if available */}
         <h3 className="text-lg font-bold text-gray-900 mb-1">
-          {song.titleChinese || song.title}
+          {showChineseTitle || song.title}
         </h3>
-        {(song.titleChinese && song.title && song.title !== song.titleChinese) && (
+        {showEnglishTitle && (
           <p className="text-sm text-gray-500 mb-2">
-            {song.title}
+            {showEnglishTitle}
           </p>
         )}
         
         {/* Display Chinese artist with English below if available */}
         <p className="text-sm text-primary-600 mb-1">
-          {song.artistChinese || song.artist}
+          {showChineseArtist || song.artist}
         </p>
-        {(song.artistChinese && song.artist && song.artist !== song.artistChinese) && (
+        {showEnglishArtist && (
           <p className="text-xs text-gray-500 mb-2">
-            {song.artist}
+            {showEnglishArtist}
           </p>
         )}
         <div className="flex justify-between items-center">

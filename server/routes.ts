@@ -131,32 +131,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const results = [];
       
       for (const song of songs) {
-        // Skip if both title and artist already have translations
+        // Always try to get translations if any field is missing
         if (
-          (song.titleChinese && song.title !== song.titleChinese) && 
-          (song.artistChinese && song.artist !== song.artistChinese)
+          !song.titleChinese || !song.artistChinese ||
+          (song.title === song.titleChinese) ||
+          (song.artist === song.artistChinese)
         ) {
-          continue;
+          // Get translations
+          const translations = await getBidirectionalTranslation(
+            song.title,
+            song.artist
+          );
+          
+          // Update fields that need translation
+          const updates: Partial<Song> = {};
+          
+          if ((!song.titleChinese || song.title === song.titleChinese) && translations.titleChinese) {
+            updates.titleChinese = translations.titleChinese;
+          }
+          
+          if ((!song.artistChinese || song.artist === song.artistChinese) && translations.artistChinese) {
+            updates.artistChinese = translations.artistChinese;
+          }
+          
+          // Only update if there are changes to make
+          if (Object.keys(updates).length > 0) {
+            const updatedSong = await storage.updateSong(song.id, updates);
+            results.push(updatedSong);
+          }
         }
-        
-        // Get translations
-        const translations = await getBidirectionalTranslation(
-          song.title,
-          song.artist
-        );
-        
-        // Update fields that need translation
-        const updates: Partial<Song> = {};
-        
-        if (!song.titleChinese && translations.titleChinese) {
-          updates.titleChinese = translations.titleChinese;
-        }
-        
-        if (!song.artistChinese && translations.artistChinese) {
-          updates.artistChinese = translations.artistChinese;
-        }
-        
-        // Skip if no updates needed
+      }
+      
+      res.json({ 
+        message: `Updated ${results.length} songs with bilingual translations`, 
+        updatedSongs: results 
+      });
+    } catch (error) {
+      console.error("Error updating translations:", error);
+      res.status(500).json({ message: "Error updating translations" });
+    }
+  });
         if (Object.keys(updates).length === 0) {
           continue;
         }
