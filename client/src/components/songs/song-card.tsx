@@ -20,15 +20,15 @@ export function SongCard({ song }: SongCardProps) {
     return images[index % images.length];
   };
 
-  // Determine what to display for title (always show both if available)
+  // Always show both Chinese and English titles if available
   const showChineseTitle = song.titleChinese || "";
-  const showEnglishTitle = (song.titleChinese && song.title && song.title !== song.titleChinese) 
+  const showEnglishTitle = (song.title && (!song.titleChinese || song.title !== song.titleChinese)) 
     ? song.title 
     : "";
 
-  // Determine what to display for artist (always show both if available)
+  // Always show both Chinese and English artists if available
   const showChineseArtist = song.artistChinese || "";
-  const showEnglishArtist = (song.artistChinese && song.artist && song.artist !== song.artistChinese)
+  const showEnglishArtist = (song.artist && (!song.artistChinese || song.artist !== song.artistChinese))
     ? song.artist
     : "";
 

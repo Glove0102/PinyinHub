@@ -1,6 +1,7 @@
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { HtmlGeneratorButton } from "@/components/admin/html-generator";
+import { TranslationUpdaterButton } from "@/components/admin/translation-updater";
 import { useAuth } from "@/hooks/use-auth";
 import { Redirect } from "wouter";
 import { Loader2 } from "lucide-react";
@@ -34,6 +35,7 @@ export default function AdminPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <HtmlGeneratorButton />
+          <TranslationUpdaterButton />
           
           <div className="p-4 border rounded-lg bg-gray-50">
             <h3 className="text-lg font-medium mb-2">Site Statistics</h3>

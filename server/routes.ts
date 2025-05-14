@@ -169,7 +169,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // Update existing songs with bilingual translations
+  // Update existing songs with proper bilingual translations (both Chinese and English for titles and artists)
   app.post("/api/songs/update-translations", isAuthenticated, async (req, res) => {
     try {
       // Get all songs
@@ -191,15 +191,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
             song.artist
           );
           
-          // Update fields that need translation
+          // Update fields with translations to ensure we have both languages
           const updates: Partial<Song> = {};
           
-          if ((!song.titleChinese || song.title === song.titleChinese) && translations.titleChinese) {
+          // Always update the Chinese and English titles if we have translations
+          if (translations.titleChinese) {
             updates.titleChinese = translations.titleChinese;
           }
           
-          if ((!song.artistChinese || song.artist === song.artistChinese) && translations.artistChinese) {
+          if (translations.titleEnglish && (!song.title || song.title === song.titleChinese)) {
+            updates.title = translations.titleEnglish;
+          }
+          
+          if (translations.artistChinese) {
             updates.artistChinese = translations.artistChinese;
+          }
+          
+          if (translations.artistEnglish && (!song.artist || song.artist === song.artistChinese)) {
+            updates.artist = translations.artistEnglish;
           }
           
           // Only update if there are changes to make

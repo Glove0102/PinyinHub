@@ -40,7 +40,8 @@ export async function processChineseLyrics(lyrics: string): Promise<{
     });
 
     // Parse the JSON response
-    const result = JSON.parse(response.choices[0].message.content);
+    const content = response.choices[0].message.content || '{}';
+    const result = JSON.parse(content);
     
     return {
       simplifiedLyrics: result.simplifiedLyrics,
@@ -76,7 +77,8 @@ export async function translateText(text: string, targetLanguage: "chinese" | "e
       ]
     });
 
-    return response.choices[0].message.content?.trim() || "";
+    const content = response.choices[0].message.content || "";
+    return content.trim();
   } catch (error) {
     console.error("Error translating text with OpenAI:", error);
     throw new Error("Failed to translate text: " + (error as Error).message);
@@ -122,7 +124,8 @@ export async function getBidirectionalTranslation(
     });
 
     // Parse the JSON response
-    return JSON.parse(response.choices[0].message.content);
+    const content = response.choices[0].message.content || '{}';
+    return JSON.parse(content);
   } catch (error) {
     console.error("Error getting translations with OpenAI:", error);
     throw new Error("Failed to get translations: " + (error as Error).message);
