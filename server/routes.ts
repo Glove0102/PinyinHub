@@ -1,3 +1,4 @@
+
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
@@ -160,24 +161,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
             results.push(updatedSong);
           }
         }
-      }
-      
-      res.json({ 
-        message: `Updated ${results.length} songs with bilingual translations`, 
-        updatedSongs: results 
-      });
-    } catch (error) {
-      console.error("Error updating translations:", error);
-      res.status(500).json({ message: "Error updating translations" });
-    }
-  });
-        if (Object.keys(updates).length === 0) {
-          continue;
-        }
-        
-        // Update the song
-        const updatedSong = await storage.updateSong(song.id, updates);
-        results.push(updatedSong);
       }
       
       res.json({ 

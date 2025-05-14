@@ -35,9 +35,6 @@ export function Header() {
               <Link href="/browse" className={`px-3 py-2 text-sm font-medium ${location === "/browse" ? "text-primary hover:text-primary-600" : "text-gray-700 hover:text-primary"}`}>
                 Browse Songs
               </Link>
-              <Link href="/about" className={`px-3 py-2 text-sm font-medium ${location === "/about" ? "text-primary hover:text-primary-600" : "text-gray-700 hover:text-primary"}`}>
-                About
-              </Link>
             </nav>
           </div>
           
