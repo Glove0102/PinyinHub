@@ -1,6 +1,9 @@
 import { songs, type Song, type InsertSong, type User, type InsertUser, users } from "@shared/schema";
 import session from "express-session";
 import createMemoryStore from "memorystore";
+import { eq, like, or, desc, sql, and } from "drizzle-orm";
+import { db } from "./db";
+import ConnectPgSimple from "connect-pg-simple";
 
 const MemoryStore = createMemoryStore(session);
 
@@ -22,13 +25,13 @@ export interface IStorage {
   incrementSongViews(id: number): Promise<void>;
   
   // Session store
-  sessionStore: session.SessionStore;
+  sessionStore: any;
 }
 
 export class MemStorage implements IStorage {
   private users: Map<number, User>;
   private songs: Map<number, Song>;
-  sessionStore: session.SessionStore;
+  sessionStore: any;
   private userIdCounter: number;
   private songIdCounter: number;
 
@@ -80,7 +83,7 @@ export class MemStorage implements IStorage {
     return Array.from(this.songs.values())
       .sort((a, b) => {
         // Sort by creation date (newest first)
-        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        return new Date(b.createdAt || new Date()).getTime() - new Date(a.createdAt || new Date()).getTime();
       })
       .slice(offset, offset + limit);
   }
@@ -90,7 +93,7 @@ export class MemStorage implements IStorage {
       .filter(song => song.userId === userId)
       .sort((a, b) => {
         // Sort by creation date (newest first)
-        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        return new Date(b.createdAt || new Date()).getTime() - new Date(a.createdAt || new Date()).getTime();
       });
   }
 
@@ -121,7 +124,10 @@ export class MemStorage implements IStorage {
       pinyinLyrics: [], // Will be populated by OpenAI
       englishLyrics: [], // Will be populated by OpenAI
       views: 0,
-      createdAt: now
+      createdAt: now,
+      titleChinese: insertSong.titleChinese || null,
+      artistChinese: insertSong.artistChinese || null,
+      genre: insertSong.genre || null
     };
     this.songs.set(id, song);
     return song;
@@ -145,4 +151,97 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+export class DatabaseStorage implements IStorage {
+  sessionStore: any;
+
+  constructor() {
+    // Setup PostgreSQL session store
+    const pgStoreFactory = ConnectPgSimple(session);
+    this.sessionStore = new pgStoreFactory({
+      conObject: {
+        connectionString: process.env.DATABASE_URL,
+      },
+      createTableIfMissing: true,
+    });
+  }
+
+  async getUser(id: number): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user;
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user;
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
+    return user;
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const [user] = await db.insert(users).values(insertUser).returning();
+    return user;
+  }
+
+  async getSong(id: number): Promise<Song | undefined> {
+    const [song] = await db.select().from(songs).where(eq(songs.id, id));
+    return song;
+  }
+
+  async getSongs(limit: number = 10, offset: number = 0): Promise<Song[]> {
+    return db.select().from(songs).orderBy(desc(songs.createdAt)).limit(limit).offset(offset);
+  }
+
+  async getSongsByUserId(userId: number): Promise<Song[]> {
+    return db.select().from(songs).where(eq(songs.userId, userId)).orderBy(desc(songs.createdAt));
+  }
+
+  async searchSongs(query: string): Promise<Song[]> {
+    const likePattern = `%${query}%`;
+    return db.select().from(songs).where(
+      or(
+        like(songs.title, likePattern),
+        like(songs.titleChinese, likePattern),
+        like(songs.artist, likePattern),
+        like(songs.artistChinese, likePattern)
+      )
+    ).orderBy(desc(songs.views));
+  }
+
+  async createSong(insertSong: InsertSong): Promise<Song> {
+    const songData = {
+      ...insertSong,
+      simplifiedLyrics: insertSong.lyrics,
+      pinyinLyrics: [],
+      englishLyrics: [],
+      views: 0
+    };
+    
+    const [song] = await db.insert(songs).values(songData).returning();
+    return song;
+  }
+
+  async updateSong(id: number, updates: Partial<Song>): Promise<Song | undefined> {
+    const [updatedSong] = await db
+      .update(songs)
+      .set(updates)
+      .where(eq(songs.id, id))
+      .returning();
+    
+    return updatedSong;
+  }
+
+  async incrementSongViews(id: number): Promise<void> {
+    await db
+      .update(songs)
+      .set({
+        views: sql`${songs.views} + 1`
+      })
+      .where(eq(songs.id, id));
+  }
+}
+
+// Switch to database storage
+export const storage = new DatabaseStorage();
