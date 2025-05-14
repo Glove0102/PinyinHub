@@ -66,6 +66,8 @@ function createSlug(id: number, title: string, titleChinese: string | null): str
  * Format song data for HTML display
  */
 function formatSongData(song: Song) {
+  console.log("Formatting song data for HTML:", song.id);
+  
   // Extract the primary title and artist (prefer Chinese if available)
   const primaryTitle = song.titleChinese || song.title;
   const secondaryTitle = song.titleChinese && song.title !== song.titleChinese ? song.title : null;
@@ -73,29 +75,72 @@ function formatSongData(song: Song) {
   const primaryArtist = song.artistChinese || song.artist;
   const secondaryArtist = song.artistChinese && song.artist !== song.artistChinese ? song.artist : null;
   
-  // Format pinyin lines for HTML display
-  const formattedPinyinLyrics = song.pinyinLyrics && Array.isArray(song.pinyinLyrics) ? 
-    song.pinyinLyrics.map((line: {pinyin: string, chinese: string}) => ({
-      pinyin: line.pinyin,
-      chinese: line.chinese
-    })) : [];
+  console.log("Checking pinyinLyrics:", typeof song.pinyinLyrics, Array.isArray(song.pinyinLyrics), song.pinyinLyrics);
   
-  // Format English lyrics for HTML display
-  const formattedEnglishLyrics = song.englishLyrics && Array.isArray(song.englishLyrics) ? song.englishLyrics : [];
+  // Format pinyin lines for HTML display - handle all possible cases safely
+  let formattedPinyinLyrics: Array<{pinyin: string, chinese: string}> = [];
+  if (song.pinyinLyrics) {
+    if (Array.isArray(song.pinyinLyrics)) {
+      formattedPinyinLyrics = song.pinyinLyrics.map((line: any) => {
+        if (typeof line === 'object' && line !== null) {
+          return {
+            pinyin: line.pinyin || '',
+            chinese: line.chinese || ''
+          };
+        }
+        return { pinyin: '', chinese: '' };
+      });
+    } else if (typeof song.pinyinLyrics === 'string') {
+      // If it's a string (due to JSON parsing issue), try to parse it
+      try {
+        const parsed = JSON.parse(song.pinyinLyrics as unknown as string);
+        if (Array.isArray(parsed)) {
+          formattedPinyinLyrics = parsed.map((line: any) => ({
+            pinyin: line.pinyin || '',
+            chinese: line.chinese || ''
+          }));
+        }
+      } catch (e) {
+        console.error("Error parsing pinyinLyrics:", e);
+      }
+    }
+  }
   
-  return {
+  // Format English lyrics for HTML display - handle all possible cases safely
+  let formattedEnglishLyrics: string[] = [];
+  if (song.englishLyrics) {
+    if (Array.isArray(song.englishLyrics)) {
+      formattedEnglishLyrics = song.englishLyrics.filter(line => typeof line === 'string');
+    } else if (typeof song.englishLyrics === 'string') {
+      // If it's a string (due to JSON parsing issue), try to parse it
+      try {
+        const parsed = JSON.parse(song.englishLyrics as unknown as string);
+        if (Array.isArray(parsed)) {
+          formattedEnglishLyrics = parsed.filter(line => typeof line === 'string');
+        }
+      } catch (e) {
+        console.error("Error parsing englishLyrics:", e);
+      }
+    }
+  }
+  
+  const result = {
     id: song.id,
     primaryTitle,
     secondaryTitle,
     primaryArtist,
     secondaryArtist,
-    simplifiedLyrics: song.simplifiedLyrics || song.lyrics,
+    simplifiedLyrics: song.simplifiedLyrics || song.lyrics || '',
     pinyinLyrics: formattedPinyinLyrics,
     englishLyrics: formattedEnglishLyrics,
     genre: song.genre || 'Chinese Music',
     views: song.views || 0,
     createdAt: song.createdAt || new Date()
   };
+  
+  console.log("Formatted song data result:", Object.keys(result));
+  
+  return result;
 }
 
 /**

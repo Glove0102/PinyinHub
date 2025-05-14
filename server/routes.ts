@@ -6,6 +6,9 @@ import { setupAuth, isAuthenticated } from "./auth";
 import { insertSongSchema, Song } from "@shared/schema";
 import { processChineseLyrics, getBidirectionalTranslation } from "./openai";
 import { generateSongHtml, updateSongHtml } from "./htmlGenerator";
+import { generateAllSongHtml } from "./generateHtml";
+import fs from 'fs/promises';
+import path from 'path';
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -106,8 +109,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Generate static HTML page for SEO
       if (updatedSong) {
         try {
+          console.log("Starting HTML generation process");
+          console.log("Song data:", JSON.stringify(updatedSong, null, 2));
+          
           const htmlPath = await generateSongHtml(updatedSong);
           console.log(`Generated static HTML for song ${updatedSong.id} at ${htmlPath}`);
+          
+          // Write a simple test file as a sanity check
+          const testFilePath = path.join(process.cwd(), 'public', 'songs', `test-song-${updatedSong.id}.html`);
+          await fs.writeFile(testFilePath, `<html><body>Test file for song ${updatedSong.id}</body></html>`, 'utf-8');
+          console.log(`Wrote test file to ${testFilePath}`);
           
           // Add the HTML path to the response data
           const responseData = {
@@ -116,8 +127,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
           };
           
           res.status(201).json(responseData);
-        } catch (htmlError) {
+        } catch (error) {
+          const htmlError = error as Error;
           console.error("Error generating static HTML:", htmlError);
+          console.error(htmlError.stack);
           // Still return the song data even if HTML generation fails
           res.status(201).json(updatedSong);
         }
@@ -140,6 +153,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(songs);
     } catch (error) {
       res.status(500).json({ message: "Error fetching user songs" });
+    }
+  });
+  
+  // Generate HTML for all songs
+  app.post("/api/songs/generate-html", isAuthenticated, async (req, res) => {
+    try {
+      // Start the HTML generation process
+      await generateAllSongHtml();
+      
+      res.json({ message: "HTML generation process completed" });
+    } catch (error) {
+      console.error("Error generating HTML:", error);
+      res.status(500).json({ message: "Error generating HTML" });
     }
   });
   
