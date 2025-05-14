@@ -1,0 +1,81 @@
+Chinese Lyrics App - Product Requirements Document
+Overview
+A web application that allows users to view Chinese song lyrics with Pinyin transliteration and translations. The app will provide a simple interface for registered users to post songs and for all users to browse the content.
+Core Features
+Authentication System
+
+Anonymous browsing for viewing songs
+User registration and login required for posting new songs
+Simple authentication flow with email/password or social login options
+
+Song Posting Interface
+
+Title field: Accepts input in either Chinese or English
+Artist field: Accepts input in either Chinese or English with automatic bidirectional translation
+Lyrics field: Accepts pasted lyrics in either Simplified or Traditional Chinese characters
+Submit button to process and save the song
+
+Song Display Page
+Three-tab interface showing:
+
+Pinyin tab: Chinese lyrics with Pinyin transliteration
+简体 tab: Simplified Chinese characters only
+English/Chinese tab: Side-by-side or alternating lines of English translation and Chinese lyrics
+
+Translation Engine
+
+Integration with OpenAI API for:
+
+Chinese to Pinyin conversion with tone marks
+Simplified/Traditional Chinese conversion
+Chinese to English translation
+English to Chinese translation for artist names
+
+
+
+Search and Browse
+
+Search functionality by song title or artist
+Browse page showing recently added songs
+Optional categorization by genre/style
+
+Technical Requirements
+Frontend
+
+React-based single-page application
+Responsive design for mobile and desktop
+Tab-based UI for song display
+
+Backend
+
+Node.js server with Express.js
+MongoDB for database storage
+Authentication middleware
+
+External APIs
+
+OpenAI API integration for translations and Pinyin conversion
+
+User Flows
+Posting a New Song
+
+User logs in to their account
+User navigates to "Add Song" page
+User enters song title and artist (in either Chinese or English)
+User pastes Chinese lyrics (either Simplified or Traditional)
+System processes the submission:
+
+Converts to Simplified Chinese if needed
+Generates Pinyin with tone marks
+Translates lyrics to English
+
+
+User reviews the generated content and confirms submission
+System saves the song to the database
+
+Viewing a Song
+
+User (logged in or anonymous) browses or searches for songs
+User selects a song
+System loads the song page with three tabs
+User can switch between Pinyin, Simplified Chinese, and English/Chinese tabs
