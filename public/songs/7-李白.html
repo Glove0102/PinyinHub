@@ -84,388 +84,844 @@
   <link rel="canonical" href="https://pinyinhub.replit.app/songs/7">
   
   <style>
+    /* Base styles */
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       line-height: 1.6;
       color: #333;
-      max-width: 800px;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f7;
+    }
+    
+    /* Layout */
+    .container {
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 20px;
+      padding: 0 16px;
     }
-    header {
-      text-align: center;
-      border-bottom: 1px solid #eee;
-      padding-bottom: 20px;
-      margin-bottom: 30px;
+    
+    .header {
+      background-color: #fff;
+      padding: 16px 0;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
-    h1 {
-      margin-bottom: 5px;
+    
+    .header-content {
+      display: flex;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      color: #111;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+    
+    .logo svg {
+      width: 32px;
+      height: 32px;
+      margin-right: 8px;
       color: #2563eb;
     }
-    .subtitle {
-      color: #4b5563;
-      font-size: 1.2rem;
-      margin-top: 0;
+    
+    .main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 16px;
     }
-    .artist {
+    
+    .footer {
+      background-color: #fff;
+      padding: 16px 0;
+      box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.1);
+      margin-top: 32px;
+      text-align: center;
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+    
+    /* Song header section */
+    .back-button {
+      margin-bottom: 24px;
+      display: inline-block;
+      padding: 8px 12px;
+      font-size: 0.875rem;
+      color: #4b5563;
+      background-color: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    
+    .back-button:hover {
+      background-color: #f9fafb;
+    }
+    
+    .song-header {
+      background-color: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      margin-bottom: 32px;
+    }
+    
+    .song-cover {
+      position: relative;
+      height: 320px;
+      overflow: hidden;
+    }
+    
+    .song-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .song-cover-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.5) 50%, transparent 100%);
+    }
+    
+    .song-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 32px;
+      color: #fff;
+    }
+    
+    .song-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    
+    .song-title-secondary {
+      font-size: 1.5rem;
+      color: #e5e7eb;
+      margin-bottom: 8px;
+    }
+    
+    .song-artist {
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: #d1d5db;
+      margin-bottom: 4px;
+    }
+    
+    .song-artist-secondary {
+      font-size: 1rem;
+      color: #9ca3af;
+    }
+    
+    .song-meta {
+      display: flex;
+      align-items: center;
+      margin-top: 16px;
+    }
+    
+    .song-genre {
+      background-color: rgba(37, 99, 235, 0.8);
+      color: #fff;
+      font-size: 0.75rem;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+    
+    .song-views {
+      margin-left: 16px;
+      font-size: 0.875rem;
+      color: #d1d5db;
+    }
+    
+    /* Song content section */
+    .song-content {
+      background-color: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      padding: 24px 32px 32px;
+    }
+    
+    /* Tabs */
+    .tabs {
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      margin-bottom: 24px;
+    }
+    
+    .tab {
+      padding: 8px 0;
+      margin-right: 24px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #6b7280;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+    }
+    
+    .tab.active {
+      color: #2563eb;
+      border-color: #2563eb;
+    }
+    
+    /* Lyrics content */
+    .tab-content {
+      padding-top: 16px;
+    }
+    
+    .lyrics-text .pinyin {
+      color: #4b5563;
+      display: block;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    
+    .lyrics-text .chinese {
       font-size: 1.1rem;
-      color: #4b5563;
+      line-height: 1.5;
+      display: block;
+      margin-bottom: 16px;
     }
-    .section {
-      margin-bottom: 30px;
-    }
-    .section-title {
-      font-size: 1.2rem;
-      margin-bottom: 15px;
-      font-weight: bold;
-      color: #1f2937;
-    }
-    .lyrics-container {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-    .lyrics-line {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-    .pinyin {
-      color: #4b5563;
-    }
-    .chinese {
-      font-size: 1.2rem;
-    }
-    .english {
+    
+    .lyrics-text .english {
       color: #6b7280;
       font-style: italic;
+      line-height: 1.5;
+      margin-bottom: 16px;
     }
+    
+    /* Actions section */
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 32px;
+    }
+    
+    .favorite-button {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      font-size: 0.875rem;
+      color: #4b5563;
+      background-color: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    
+    .favorite-button svg {
+      width: 16px;
+      height: 16px;
+      margin-right: 4px;
+    }
+    
+    .date-added {
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+    
+    /* App link */
     .app-link {
       display: block;
       text-align: center;
-      margin-top: 40px;
-      padding: 15px;
+      margin: 32px auto;
+      max-width: 300px;
+      padding: 16px;
       background-color: #2563eb;
       color: white;
       text-decoration: none;
-      border-radius: 5px;
-      font-weight: bold;
+      border-radius: 8px;
+      font-weight: 600;
+      box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+      transition: all 0.2s;
     }
-    .metadata {
-      font-size: 0.8rem;
-      color: #6b7280;
-      margin-top: 30px;
-      text-align: center;
+    
+    .app-link:hover {
+      background-color: #1d4ed8;
+      box-shadow: 0 6px 10px -1px rgba(37, 99, 235, 0.3);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .song-cover {
+        height: 240px;
+      }
+      
+      .song-title {
+        font-size: 1.5rem;
+      }
+      
+      .song-title-secondary {
+        font-size: 1.25rem;
+      }
+      
+      .song-content {
+        padding: 16px 24px 24px;
+      }
+    }
+    
+    /* Side-by-side layout for English/Chinese tab */
+    .columns {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    
+    @media (min-width: 768px) {
+      .columns {
+        grid-template-columns: 1fr 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>李白</h1>
-    
-    <p class="artist">
-      李荣浩
-      
-    </p>
-  </header>
+  <div class="header">
+    <div class="header-content">
+      <a href="https://pinyinhub.replit.app" class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 8l5 3l5 -3l5 3v6l-5 3l-5 -3l-5 3v-6l5 -3z"></path>
+          <path d="M10 6l5 -3l5 3"></path>
+        </svg>
+        <span>PinyinHub</span>
+      </a>
+    </div>
+  </div>
   
-  <main>
-    <div class="section">
-      <h2 class="section-title">Lyrics with Pinyin</h2>
-      <div class="lyrics-container">
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Dà bùfen rén yào wǒ xuéxí qù kàn shìsú de yǎnguāng</div>
-          <div class="chinese">大部分人要我学习去看 世俗的眼光</div>
+  <div class="main">
+    <a href="https://pinyinhub.replit.app/browse" class="back-button">
+      ← Back to songs
+    </a>
+    
+    <!-- Song header -->
+    <div class="song-header">
+      <div class="song-cover">
+        <img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=1000" alt="李白 by 李荣浩">
+        <div class="song-cover-overlay"></div>
+        <div class="song-info">
+          <h1 class="song-title">李白</h1>
+          
+          <p class="song-artist">李荣浩</p>
+          
+          <div class="song-meta">
+            <span class="song-genre">Chinese Music</span>
+            <span class="song-views">5 views</span>
+          </div>
         </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Wǒ rènzhēn xuéxí le shìsú yǎnguāng shìsú dào tiānliàng</div>
-          <div class="chinese">我认真学习了世俗眼光 世俗到天亮</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Yī bù wàiguó diànyǐng méi tīng dǒng yījù huà</div>
-          <div class="chinese">一部外国电影没听懂一句话</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Kàn wán jiéjú cái shì xiàohuà</div>
-          <div class="chinese">看完结局才是笑话</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Nǐ kàn wǒ duō guāi duō cōngmíng duōme tīnghuà duō jiānzhà</div>
-          <div class="chinese">你看我多乖多聪明多么听话 多奸诈</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Hē le jǐ dà wǎn mǐjiǔ zài líkāi shì wèile mófǎng</div>
-          <div class="chinese">喝了几大碗米酒再离开是为了模仿</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Yī chūmén bù xiǎoxīn tǔ de nà fú shì shéi de shūhuà</div>
-          <div class="chinese">一出门不小心吐的那幅是谁的书画</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Nǐ yītiān yī kǒu yīgè qīn'ài de duìfāng</div>
-          <div class="chinese">你一天一口一个 亲爱的对方</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Duōme bù liúxíng de múyàng</div>
-          <div class="chinese">多么不流行的模样</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Dōu yīnggāi liàn liàn shūfǎ zài chūmén chuǎngdàng</div>
-          <div class="chinese">都应该练练书法再出门闯荡</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Cái huì yǒurén rèqíng mǎizhàng</div>
-          <div class="chinese">才会有人热情买账</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Yàoshi néng chóng lái wǒ yào xuǎn Lǐ Bái</div>
-          <div class="chinese">要是能重来 我要选李白</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Jǐ bǎi nián qián zuò de hǎo huài méi nàme duō rén cāi</div>
-          <div class="chinese">几百年前做的好坏 没那么多人猜</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Yàoshi néng chóng lái wǒ yào xuǎn Lǐ Bái</div>
-          <div class="chinese">要是能重来 我要选李白</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Zhìshǎo wǒ hái néng xiě xiě shī lái pēngpài dòu dòu nǚhái</div>
-          <div class="chinese">至少我还能写写诗来澎湃 逗逗女孩</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Yàoshi néng chóng lái wǒ yào xuǎn Lǐ Bái</div>
-          <div class="chinese">要是能重来 我要选李白</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Chuàngzuò yě néng dào nàme gāoduān bèi nàme duō rén chóngbài</div>
-          <div class="chinese">创作也能到那么高端 被那么多人崇拜</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Yàoshi néng chóng lái</div>
-          <div class="chinese">要是能重来</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Hē le jǐ dà wǎn mǐjiǔ zài líkāi shì wèile mófǎng</div>
-          <div class="chinese">喝了几大碗米酒再离开是为了模仿</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Yī chūmén bù xiǎoxīn tǔ de nà fú shì shéi de shūhuà</div>
-          <div class="chinese">一出门不小心吐的那幅是谁的书画</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Nǐ yītiān yī kǒu yīgè qīn'ài de duìfāng</div>
-          <div class="chinese">你一天一口一个 亲爱的对方</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Duōme bù liúxíng de múyàng</div>
-          <div class="chinese">多么不流行的模样</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Dōu yīnggāi liàn liàn shūfǎ zài chūmén chuǎngdàng</div>
-          <div class="chinese">都应该练练书法再出门闯荡</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Cái huì yǒurén rèqíng mǎizhàng</div>
-          <div class="chinese">才会有人热情买账</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Yàoshi néng chóng lái wǒ yào xuǎn Lǐ Bái</div>
-          <div class="chinese">要是能重来 我要选李白</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Jǐ bǎi nián qián zuò de hǎo huài méi nàme duō rén cāi</div>
-          <div class="chinese">几百年前做的好坏 没那么多人猜</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Yàoshi néng chóng lái wǒ yào xuǎn Lǐ Bái</div>
-          <div class="chinese">要是能重来 我要选李白</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Zhìshǎo wǒ hái néng xiě xiě shī lái pēngpài dòu dòu nǚhái</div>
-          <div class="chinese">至少我还能写写诗来澎湃 逗逗女孩</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Yàoshi néng chóng lái wǒ yào xuǎn Lǐ Bái</div>
-          <div class="chinese">要是能重来 我要选李白</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Chuàngzuò yě néng dào nàme gāoduān bèi nàme duō rén chóngbài</div>
-          <div class="chinese">创作也能到那么高端 被那么多人崇拜</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Yàoshi néng chóng lái</div>
-          <div class="chinese">要是能重来</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Yàoshi néng chóng lái wǒ yào xuǎn Lǐ Bái</div>
-          <div class="chinese">要是能重来 我要选李白</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Jǐ bǎi nián qián zuò de hǎo huài méi nàme duō rén cāi</div>
-          <div class="chinese">几百年前做的好坏 没那么多人猜</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Yàoshi néng chóng lái wǒ yào xuǎn Lǐ Bái</div>
-          <div class="chinese">要是能重来 我要选李白</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Zhìshǎo wǒ hái néng xiě xiě shī lái pēngpài dòu dòu nǚhái</div>
-          <div class="chinese">至少我还能写写诗来澎湃 逗逗女孩</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Yàoshi néng chóng lái wǒ yào xuǎn Lǐ Bái</div>
-          <div class="chinese">要是能重来 我要选李白</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Chuàngzuò yě néng dào nàme gāoduān bèi nàme duō rén chóngbài</div>
-          <div class="chinese">创作也能到那么高端 被那么多人崇拜</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Yàoshi néng chóng lái</div>
-          <div class="chinese">要是能重来</div>
-        </div>
-        
       </div>
     </div>
     
-    <div class="section">
-      <h2 class="section-title">English Translation</h2>
-      <div class="lyrics-container">
+    <!-- Song content with tabs -->
+    <div class="song-content">
+      <div class="tabs">
+        <div class="tab active" id="tab-pinyin">Pinyin</div>
+        <div class="tab" id="tab-chinese">简体</div>
+        <div class="tab" id="tab-english">English/Chinese</div>
+      </div>
+      
+      <!-- Pinyin tab content -->
+      <div class="tab-content lyrics-text" id="content-pinyin">
         
-        <div class="english">Most people want me to study and see the secular views</div>
+        <div>
+          <span class="pinyin">Dà bùfen rén yào wǒ xuéxí qù kàn shìsú de yǎnguāng</span>
+          <span class="chinese">大部分人要我学习去看 世俗的眼光</span>
+        </div>
         
-        <div class="english">I seriously studied the secular views, secular until dawn</div>
+        <div>
+          <span class="pinyin">Wǒ rènzhēn xuéxí le shìsú yǎnguāng shìsú dào tiānliàng</span>
+          <span class="chinese">我认真学习了世俗眼光 世俗到天亮</span>
+        </div>
         
-        <div class="english">I didn't understand a single sentence of a foreign movie</div>
+        <div>
+          <span class="pinyin">Yī bù wàiguó diànyǐng méi tīng dǒng yījù huà</span>
+          <span class="chinese">一部外国电影没听懂一句话</span>
+        </div>
         
-        <div class="english">Only after watching the ending is it a joke</div>
+        <div>
+          <span class="pinyin">Kàn wán jiéjú cái shì xiàohuà</span>
+          <span class="chinese">看完结局才是笑话</span>
+        </div>
         
-        <div class="english">Look how well-behaved, clever, obedient, and cunning I am</div>
+        <div>
+          <span class="pinyin">Nǐ kàn wǒ duō guāi duō cōngmíng duōme tīnghuà duō jiānzhà</span>
+          <span class="chinese">你看我多乖多聪明多么听话 多奸诈</span>
+        </div>
         
-        <div class="english">Drank several large bowls of rice wine before leaving to imitate</div>
+        <div>
+          <span class="pinyin">Hē le jǐ dà wǎn mǐjiǔ zài líkāi shì wèile mófǎng</span>
+          <span class="chinese">喝了几大碗米酒再离开是为了模仿</span>
+        </div>
         
-        <div class="english">Who owns the painting I accidentally threw up right after going out?</div>
+        <div>
+          <span class="pinyin">Yī chūmén bù xiǎoxīn tǔ de nà fú shì shéi de shūhuà</span>
+          <span class="chinese">一出门不小心吐的那幅是谁的书画</span>
+        </div>
         
-        <div class="english">You take one bite one day, dear counterpart</div>
+        <div>
+          <span class="pinyin">Nǐ yītiān yī kǒu yīgè qīn'ài de duìfāng</span>
+          <span class="chinese">你一天一口一个 亲爱的对方</span>
+        </div>
         
-        <div class="english">Such an unfashionable look</div>
+        <div>
+          <span class="pinyin">Duōme bù liúxíng de múyàng</span>
+          <span class="chinese">多么不流行的模样</span>
+        </div>
         
-        <div class="english">Everyone should practice calligraphy before going out to explore</div>
+        <div>
+          <span class="pinyin">Dōu yīnggāi liàn liàn shūfǎ zài chūmén chuǎngdàng</span>
+          <span class="chinese">都应该练练书法再出门闯荡</span>
+        </div>
         
-        <div class="english">Only then will someone enthusiastically pay the bill</div>
+        <div>
+          <span class="pinyin">Cái huì yǒurén rèqíng mǎizhàng</span>
+          <span class="chinese">才会有人热情买账</span>
+        </div>
         
-        <div class="english">If I could start over, I'd choose Li Bai</div>
+        <div>
+          <span class="pinyin">Yàoshi néng chóng lái wǒ yào xuǎn Lǐ Bái</span>
+          <span class="chinese">要是能重来 我要选李白</span>
+        </div>
         
-        <div class="english">Good or bad from hundreds of years ago, not so many people guess</div>
+        <div>
+          <span class="pinyin">Jǐ bǎi nián qián zuò de hǎo huài méi nàme duō rén cāi</span>
+          <span class="chinese">几百年前做的好坏 没那么多人猜</span>
+        </div>
         
-        <div class="english">If I could start over, I'd choose Li Bai</div>
+        <div>
+          <span class="pinyin">Yàoshi néng chóng lái wǒ yào xuǎn Lǐ Bái</span>
+          <span class="chinese">要是能重来 我要选李白</span>
+        </div>
         
-        <div class="english">At least I could still write some poems passionately, teasing girls</div>
+        <div>
+          <span class="pinyin">Zhìshǎo wǒ hái néng xiě xiě shī lái pēngpài dòu dòu nǚhái</span>
+          <span class="chinese">至少我还能写写诗来澎湃 逗逗女孩</span>
+        </div>
         
-        <div class="english">If I could start over, I'd choose Li Bai</div>
+        <div>
+          <span class="pinyin">Yàoshi néng chóng lái wǒ yào xuǎn Lǐ Bái</span>
+          <span class="chinese">要是能重来 我要选李白</span>
+        </div>
         
-        <div class="english">My creation could reach such a high level, admired by so many</div>
+        <div>
+          <span class="pinyin">Chuàngzuò yě néng dào nàme gāoduān bèi nàme duō rén chóngbài</span>
+          <span class="chinese">创作也能到那么高端 被那么多人崇拜</span>
+        </div>
         
-        <div class="english">If I could start over</div>
+        <div>
+          <span class="pinyin">Yàoshi néng chóng lái</span>
+          <span class="chinese">要是能重来</span>
+        </div>
         
-        <div class="english">Drank several large bowls of rice wine before leaving to imitate</div>
+        <div>
+          <span class="pinyin">Hē le jǐ dà wǎn mǐjiǔ zài líkāi shì wèile mófǎng</span>
+          <span class="chinese">喝了几大碗米酒再离开是为了模仿</span>
+        </div>
         
-        <div class="english">Who owns the painting I accidentally threw up right after going out?</div>
+        <div>
+          <span class="pinyin">Yī chūmén bù xiǎoxīn tǔ de nà fú shì shéi de shūhuà</span>
+          <span class="chinese">一出门不小心吐的那幅是谁的书画</span>
+        </div>
         
-        <div class="english">You take one bite one day, dear counterpart</div>
+        <div>
+          <span class="pinyin">Nǐ yītiān yī kǒu yīgè qīn'ài de duìfāng</span>
+          <span class="chinese">你一天一口一个 亲爱的对方</span>
+        </div>
         
-        <div class="english">Such an unfashionable look</div>
+        <div>
+          <span class="pinyin">Duōme bù liúxíng de múyàng</span>
+          <span class="chinese">多么不流行的模样</span>
+        </div>
         
-        <div class="english">Everyone should practice calligraphy before going out to explore</div>
+        <div>
+          <span class="pinyin">Dōu yīnggāi liàn liàn shūfǎ zài chūmén chuǎngdàng</span>
+          <span class="chinese">都应该练练书法再出门闯荡</span>
+        </div>
         
-        <div class="english">Only then will someone enthusiastically pay the bill</div>
+        <div>
+          <span class="pinyin">Cái huì yǒurén rèqíng mǎizhàng</span>
+          <span class="chinese">才会有人热情买账</span>
+        </div>
         
-        <div class="english">If I could start over, I'd choose Li Bai</div>
+        <div>
+          <span class="pinyin">Yàoshi néng chóng lái wǒ yào xuǎn Lǐ Bái</span>
+          <span class="chinese">要是能重来 我要选李白</span>
+        </div>
         
-        <div class="english">Good or bad from hundreds of years ago, not so many people guess</div>
+        <div>
+          <span class="pinyin">Jǐ bǎi nián qián zuò de hǎo huài méi nàme duō rén cāi</span>
+          <span class="chinese">几百年前做的好坏 没那么多人猜</span>
+        </div>
         
-        <div class="english">If I could start over, I'd choose Li Bai</div>
+        <div>
+          <span class="pinyin">Yàoshi néng chóng lái wǒ yào xuǎn Lǐ Bái</span>
+          <span class="chinese">要是能重来 我要选李白</span>
+        </div>
         
-        <div class="english">At least I could still write some poems passionately, teasing girls</div>
+        <div>
+          <span class="pinyin">Zhìshǎo wǒ hái néng xiě xiě shī lái pēngpài dòu dòu nǚhái</span>
+          <span class="chinese">至少我还能写写诗来澎湃 逗逗女孩</span>
+        </div>
         
-        <div class="english">If I could start over, I'd choose Li Bai</div>
+        <div>
+          <span class="pinyin">Yàoshi néng chóng lái wǒ yào xuǎn Lǐ Bái</span>
+          <span class="chinese">要是能重来 我要选李白</span>
+        </div>
         
-        <div class="english">My creation could reach such a high level, admired by so many</div>
+        <div>
+          <span class="pinyin">Chuàngzuò yě néng dào nàme gāoduān bèi nàme duō rén chóngbài</span>
+          <span class="chinese">创作也能到那么高端 被那么多人崇拜</span>
+        </div>
         
-        <div class="english">If I could start over</div>
+        <div>
+          <span class="pinyin">Yàoshi néng chóng lái</span>
+          <span class="chinese">要是能重来</span>
+        </div>
         
-        <div class="english">If I could start over, I'd choose Li Bai</div>
+        <div>
+          <span class="pinyin">Yàoshi néng chóng lái wǒ yào xuǎn Lǐ Bái</span>
+          <span class="chinese">要是能重来 我要选李白</span>
+        </div>
         
-        <div class="english">Good or bad from hundreds of years ago, not so many people guess</div>
+        <div>
+          <span class="pinyin">Jǐ bǎi nián qián zuò de hǎo huài méi nàme duō rén cāi</span>
+          <span class="chinese">几百年前做的好坏 没那么多人猜</span>
+        </div>
         
-        <div class="english">If I could start over, I'd choose Li Bai</div>
+        <div>
+          <span class="pinyin">Yàoshi néng chóng lái wǒ yào xuǎn Lǐ Bái</span>
+          <span class="chinese">要是能重来 我要选李白</span>
+        </div>
         
-        <div class="english">At least I could still write some poems passionately, teasing girls</div>
+        <div>
+          <span class="pinyin">Zhìshǎo wǒ hái néng xiě xiě shī lái pēngpài dòu dòu nǚhái</span>
+          <span class="chinese">至少我还能写写诗来澎湃 逗逗女孩</span>
+        </div>
         
-        <div class="english">If I could start over, I'd choose Li Bai</div>
+        <div>
+          <span class="pinyin">Yàoshi néng chóng lái wǒ yào xuǎn Lǐ Bái</span>
+          <span class="chinese">要是能重来 我要选李白</span>
+        </div>
         
-        <div class="english">My creation could reach such a high level, admired by so many</div>
+        <div>
+          <span class="pinyin">Chuàngzuò yě néng dào nàme gāoduān bèi nàme duō rén chóngbài</span>
+          <span class="chinese">创作也能到那么高端 被那么多人崇拜</span>
+        </div>
         
-        <div class="english">If I could start over</div>
+        <div>
+          <span class="pinyin">Yàoshi néng chóng lái</span>
+          <span class="chinese">要是能重来</span>
+        </div>
         
+      </div>
+      
+      <!-- Chinese tab content (hidden by default) -->
+      <div class="tab-content lyrics-text" id="content-chinese" style="display: none;">
+        
+        <p class="chinese">大部分人要我学习去看 世俗的眼光</p>
+        
+        <p class="chinese">我认真学习了世俗眼光 世俗到天亮</p>
+        
+        <p class="chinese">一部外国电影没听懂一句话</p>
+        
+        <p class="chinese">看完结局才是笑话</p>
+        
+        <p class="chinese">你看我多乖多聪明多么听话 多奸诈</p>
+        
+        <p class="chinese">喝了几大碗米酒再离开是为了模仿</p>
+        
+        <p class="chinese">一出门不小心吐的那幅是谁的书画</p>
+        
+        <p class="chinese">你一天一口一个 亲爱的对方</p>
+        
+        <p class="chinese">多么不流行的模样</p>
+        
+        <p class="chinese">都应该练练书法再出门闯荡</p>
+        
+        <p class="chinese">才会有人热情买账</p>
+        
+        <p class="chinese">要是能重来 我要选李白</p>
+        
+        <p class="chinese">几百年前做的好坏 没那么多人猜</p>
+        
+        <p class="chinese">要是能重来 我要选李白</p>
+        
+        <p class="chinese">至少我还能写写诗来澎湃 逗逗女孩</p>
+        
+        <p class="chinese">要是能重来 我要选李白</p>
+        
+        <p class="chinese">创作也能到那么高端 被那么多人崇拜</p>
+        
+        <p class="chinese">要是能重来</p>
+        
+        <p class="chinese">喝了几大碗米酒再离开是为了模仿</p>
+        
+        <p class="chinese">一出门不小心吐的那幅是谁的书画</p>
+        
+        <p class="chinese">你一天一口一个 亲爱的对方</p>
+        
+        <p class="chinese">多么不流行的模样</p>
+        
+        <p class="chinese">都应该练练书法再出门闯荡</p>
+        
+        <p class="chinese">才会有人热情买账</p>
+        
+        <p class="chinese">要是能重来 我要选李白</p>
+        
+        <p class="chinese">几百年前做的好坏 没那么多人猜</p>
+        
+        <p class="chinese">要是能重来 我要选李白</p>
+        
+        <p class="chinese">至少我还能写写诗来澎湃 逗逗女孩</p>
+        
+        <p class="chinese">要是能重来 我要选李白</p>
+        
+        <p class="chinese">创作也能到那么高端 被那么多人崇拜</p>
+        
+        <p class="chinese">要是能重来</p>
+        
+        <p class="chinese">要是能重来 我要选李白</p>
+        
+        <p class="chinese">几百年前做的好坏 没那么多人猜</p>
+        
+        <p class="chinese">要是能重来 我要选李白</p>
+        
+        <p class="chinese">至少我还能写写诗来澎湃 逗逗女孩</p>
+        
+        <p class="chinese">要是能重来 我要选李白</p>
+        
+        <p class="chinese">创作也能到那么高端 被那么多人崇拜</p>
+        
+        <p class="chinese">要是能重来</p>
+        
+      </div>
+      
+      <!-- English/Chinese tab content (hidden by default) -->
+      <div class="tab-content lyrics-text" id="content-english" style="display: none;">
+        <div class="columns">
+          <div>
+            
+            <p class="chinese">大部分人要我学习去看 世俗的眼光</p>
+            
+            <p class="chinese">我认真学习了世俗眼光 世俗到天亮</p>
+            
+            <p class="chinese">一部外国电影没听懂一句话</p>
+            
+            <p class="chinese">看完结局才是笑话</p>
+            
+            <p class="chinese">你看我多乖多聪明多么听话 多奸诈</p>
+            
+            <p class="chinese">喝了几大碗米酒再离开是为了模仿</p>
+            
+            <p class="chinese">一出门不小心吐的那幅是谁的书画</p>
+            
+            <p class="chinese">你一天一口一个 亲爱的对方</p>
+            
+            <p class="chinese">多么不流行的模样</p>
+            
+            <p class="chinese">都应该练练书法再出门闯荡</p>
+            
+            <p class="chinese">才会有人热情买账</p>
+            
+            <p class="chinese">要是能重来 我要选李白</p>
+            
+            <p class="chinese">几百年前做的好坏 没那么多人猜</p>
+            
+            <p class="chinese">要是能重来 我要选李白</p>
+            
+            <p class="chinese">至少我还能写写诗来澎湃 逗逗女孩</p>
+            
+            <p class="chinese">要是能重来 我要选李白</p>
+            
+            <p class="chinese">创作也能到那么高端 被那么多人崇拜</p>
+            
+            <p class="chinese">要是能重来</p>
+            
+            <p class="chinese">喝了几大碗米酒再离开是为了模仿</p>
+            
+            <p class="chinese">一出门不小心吐的那幅是谁的书画</p>
+            
+            <p class="chinese">你一天一口一个 亲爱的对方</p>
+            
+            <p class="chinese">多么不流行的模样</p>
+            
+            <p class="chinese">都应该练练书法再出门闯荡</p>
+            
+            <p class="chinese">才会有人热情买账</p>
+            
+            <p class="chinese">要是能重来 我要选李白</p>
+            
+            <p class="chinese">几百年前做的好坏 没那么多人猜</p>
+            
+            <p class="chinese">要是能重来 我要选李白</p>
+            
+            <p class="chinese">至少我还能写写诗来澎湃 逗逗女孩</p>
+            
+            <p class="chinese">要是能重来 我要选李白</p>
+            
+            <p class="chinese">创作也能到那么高端 被那么多人崇拜</p>
+            
+            <p class="chinese">要是能重来</p>
+            
+            <p class="chinese">要是能重来 我要选李白</p>
+            
+            <p class="chinese">几百年前做的好坏 没那么多人猜</p>
+            
+            <p class="chinese">要是能重来 我要选李白</p>
+            
+            <p class="chinese">至少我还能写写诗来澎湃 逗逗女孩</p>
+            
+            <p class="chinese">要是能重来 我要选李白</p>
+            
+            <p class="chinese">创作也能到那么高端 被那么多人崇拜</p>
+            
+            <p class="chinese">要是能重来</p>
+            
+          </div>
+          <div>
+            
+            <p class="english">Most people want me to study and see the secular views</p>
+            
+            <p class="english">I seriously studied the secular views, secular until dawn</p>
+            
+            <p class="english">I didn't understand a single sentence of a foreign movie</p>
+            
+            <p class="english">Only after watching the ending is it a joke</p>
+            
+            <p class="english">Look how well-behaved, clever, obedient, and cunning I am</p>
+            
+            <p class="english">Drank several large bowls of rice wine before leaving to imitate</p>
+            
+            <p class="english">Who owns the painting I accidentally threw up right after going out?</p>
+            
+            <p class="english">You take one bite one day, dear counterpart</p>
+            
+            <p class="english">Such an unfashionable look</p>
+            
+            <p class="english">Everyone should practice calligraphy before going out to explore</p>
+            
+            <p class="english">Only then will someone enthusiastically pay the bill</p>
+            
+            <p class="english">If I could start over, I'd choose Li Bai</p>
+            
+            <p class="english">Good or bad from hundreds of years ago, not so many people guess</p>
+            
+            <p class="english">If I could start over, I'd choose Li Bai</p>
+            
+            <p class="english">At least I could still write some poems passionately, teasing girls</p>
+            
+            <p class="english">If I could start over, I'd choose Li Bai</p>
+            
+            <p class="english">My creation could reach such a high level, admired by so many</p>
+            
+            <p class="english">If I could start over</p>
+            
+            <p class="english">Drank several large bowls of rice wine before leaving to imitate</p>
+            
+            <p class="english">Who owns the painting I accidentally threw up right after going out?</p>
+            
+            <p class="english">You take one bite one day, dear counterpart</p>
+            
+            <p class="english">Such an unfashionable look</p>
+            
+            <p class="english">Everyone should practice calligraphy before going out to explore</p>
+            
+            <p class="english">Only then will someone enthusiastically pay the bill</p>
+            
+            <p class="english">If I could start over, I'd choose Li Bai</p>
+            
+            <p class="english">Good or bad from hundreds of years ago, not so many people guess</p>
+            
+            <p class="english">If I could start over, I'd choose Li Bai</p>
+            
+            <p class="english">At least I could still write some poems passionately, teasing girls</p>
+            
+            <p class="english">If I could start over, I'd choose Li Bai</p>
+            
+            <p class="english">My creation could reach such a high level, admired by so many</p>
+            
+            <p class="english">If I could start over</p>
+            
+            <p class="english">If I could start over, I'd choose Li Bai</p>
+            
+            <p class="english">Good or bad from hundreds of years ago, not so many people guess</p>
+            
+            <p class="english">If I could start over, I'd choose Li Bai</p>
+            
+            <p class="english">At least I could still write some poems passionately, teasing girls</p>
+            
+            <p class="english">If I could start over, I'd choose Li Bai</p>
+            
+            <p class="english">My creation could reach such a high level, admired by so many</p>
+            
+            <p class="english">If I could start over</p>
+            
+          </div>
+        </div>
+      </div>
+      
+      <!-- Actions -->
+      <div class="actions">
+        <a href="https://pinyinhub.replit.app/songs/7" class="favorite-button">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+          </svg>
+          Favorite
+        </a>
+        <div class="date-added">
+          Added on 5/14/2025
+        </div>
       </div>
     </div>
     
     <a href="https://pinyinhub.replit.app/songs/7" class="app-link">
       View This Song in the PinyinHub App
     </a>
-  </main>
+  </div>
   
-  <footer>
-    <p class="metadata">
-      Added on 5/14/2025 | 
-      Views: 4 | 
-      Genre: Chinese Music
-    </p>
-  </footer>
+  <div class="footer">
+    <p>© 2025 PinyinHub - Learn Chinese Through Music</p>
+  </div>
   
   <!-- Hidden lyrics content for search engines -->
   <div style="display:none" aria-hidden="true">
     大部分人要我学习去看 世俗的眼光, 我认真学习了世俗眼光 世俗到天亮, 一部外国电影没听懂一句话, 看完结局才是笑话, 你看我多乖多聪明多么听话 多奸诈, 喝了几大碗米酒再离开是为了模仿, 一出门不小心吐的那幅是谁的书画, 你一天一口一个 亲爱的对方, 多么不流行的模样, 都应该练练书法再出门闯荡, 才会有人热情买账, 要是能重来 我要选李白, 几百年前做的好坏 没那么多人猜, 要是能重来 我要选李白, 至少我还能写写诗来澎
   </div>
+  
+  <!-- Simple tab switching script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const tabs = document.querySelectorAll('.tab');
+      const contents = document.querySelectorAll('.tab-content');
+      
+      tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          // Remove active class from all tabs
+          tabs.forEach(t => t.classList.remove('active'));
+          // Add active class to clicked tab
+          this.classList.add('active');
+          
+          // Hide all tab contents
+          contents.forEach(content => content.style.display = 'none');
+          
+          // Show the corresponding content
+          const contentId = 'content-' + this.id.split('-')[1];
+          document.getElementById(contentId).style.display = 'block';
+        });
+      });
+    });
+  </script>
 </body>
 </html>

@@ -88,416 +88,888 @@
   <link rel="canonical" href="https://pinyinhub.replit.app/songs/4">
   
   <style>
+    /* Base styles */
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       line-height: 1.6;
       color: #333;
-      max-width: 800px;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f7;
+    }
+    
+    /* Layout */
+    .container {
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 20px;
+      padding: 0 16px;
     }
-    header {
-      text-align: center;
-      border-bottom: 1px solid #eee;
-      padding-bottom: 20px;
-      margin-bottom: 30px;
+    
+    .header {
+      background-color: #fff;
+      padding: 16px 0;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
-    h1 {
-      margin-bottom: 5px;
+    
+    .header-content {
+      display: flex;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      color: #111;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+    
+    .logo svg {
+      width: 32px;
+      height: 32px;
+      margin-right: 8px;
       color: #2563eb;
     }
-    .subtitle {
-      color: #4b5563;
-      font-size: 1.2rem;
-      margin-top: 0;
+    
+    .main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 16px;
     }
-    .artist {
+    
+    .footer {
+      background-color: #fff;
+      padding: 16px 0;
+      box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.1);
+      margin-top: 32px;
+      text-align: center;
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+    
+    /* Song header section */
+    .back-button {
+      margin-bottom: 24px;
+      display: inline-block;
+      padding: 8px 12px;
+      font-size: 0.875rem;
+      color: #4b5563;
+      background-color: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    
+    .back-button:hover {
+      background-color: #f9fafb;
+    }
+    
+    .song-header {
+      background-color: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      margin-bottom: 32px;
+    }
+    
+    .song-cover {
+      position: relative;
+      height: 320px;
+      overflow: hidden;
+    }
+    
+    .song-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .song-cover-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.5) 50%, transparent 100%);
+    }
+    
+    .song-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 32px;
+      color: #fff;
+    }
+    
+    .song-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    
+    .song-title-secondary {
+      font-size: 1.5rem;
+      color: #e5e7eb;
+      margin-bottom: 8px;
+    }
+    
+    .song-artist {
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: #d1d5db;
+      margin-bottom: 4px;
+    }
+    
+    .song-artist-secondary {
+      font-size: 1rem;
+      color: #9ca3af;
+    }
+    
+    .song-meta {
+      display: flex;
+      align-items: center;
+      margin-top: 16px;
+    }
+    
+    .song-genre {
+      background-color: rgba(37, 99, 235, 0.8);
+      color: #fff;
+      font-size: 0.75rem;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+    
+    .song-views {
+      margin-left: 16px;
+      font-size: 0.875rem;
+      color: #d1d5db;
+    }
+    
+    /* Song content section */
+    .song-content {
+      background-color: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      padding: 24px 32px 32px;
+    }
+    
+    /* Tabs */
+    .tabs {
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      margin-bottom: 24px;
+    }
+    
+    .tab {
+      padding: 8px 0;
+      margin-right: 24px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #6b7280;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+    }
+    
+    .tab.active {
+      color: #2563eb;
+      border-color: #2563eb;
+    }
+    
+    /* Lyrics content */
+    .tab-content {
+      padding-top: 16px;
+    }
+    
+    .lyrics-text .pinyin {
+      color: #4b5563;
+      display: block;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    
+    .lyrics-text .chinese {
       font-size: 1.1rem;
-      color: #4b5563;
+      line-height: 1.5;
+      display: block;
+      margin-bottom: 16px;
     }
-    .section {
-      margin-bottom: 30px;
-    }
-    .section-title {
-      font-size: 1.2rem;
-      margin-bottom: 15px;
-      font-weight: bold;
-      color: #1f2937;
-    }
-    .lyrics-container {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-    .lyrics-line {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-    .pinyin {
-      color: #4b5563;
-    }
-    .chinese {
-      font-size: 1.2rem;
-    }
-    .english {
+    
+    .lyrics-text .english {
       color: #6b7280;
       font-style: italic;
+      line-height: 1.5;
+      margin-bottom: 16px;
     }
+    
+    /* Actions section */
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 32px;
+    }
+    
+    .favorite-button {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      font-size: 0.875rem;
+      color: #4b5563;
+      background-color: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    
+    .favorite-button svg {
+      width: 16px;
+      height: 16px;
+      margin-right: 4px;
+    }
+    
+    .date-added {
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+    
+    /* App link */
     .app-link {
       display: block;
       text-align: center;
-      margin-top: 40px;
-      padding: 15px;
+      margin: 32px auto;
+      max-width: 300px;
+      padding: 16px;
       background-color: #2563eb;
       color: white;
       text-decoration: none;
-      border-radius: 5px;
-      font-weight: bold;
+      border-radius: 8px;
+      font-weight: 600;
+      box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+      transition: all 0.2s;
     }
-    .metadata {
-      font-size: 0.8rem;
-      color: #6b7280;
-      margin-top: 30px;
-      text-align: center;
+    
+    .app-link:hover {
+      background-color: #1d4ed8;
+      box-shadow: 0 6px 10px -1px rgba(37, 99, 235, 0.3);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .song-cover {
+        height: 240px;
+      }
+      
+      .song-title {
+        font-size: 1.5rem;
+      }
+      
+      .song-title-secondary {
+        font-size: 1.25rem;
+      }
+      
+      .song-content {
+        padding: 16px 24px 24px;
+      }
+    }
+    
+    /* Side-by-side layout for English/Chinese tab */
+    .columns {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    
+    @media (min-width: 768px) {
+      .columns {
+        grid-template-columns: 1fr 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>家在东北</h1>
-    
-    <p class="artist">
-      庞龙
-      
-    </p>
-  </header>
+  <div class="header">
+    <div class="header-content">
+      <a href="https://pinyinhub.replit.app" class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 8l5 3l5 -3l5 3v6l-5 3l-5 -3l-5 3v-6l5 -3z"></path>
+          <path d="M10 6l5 -3l5 3"></path>
+        </svg>
+        <span>PinyinHub</span>
+      </a>
+    </div>
+  </div>
   
-  <main>
-    <div class="section">
-      <h2 class="section-title">Lyrics with Pinyin</h2>
-      <div class="lyrics-container">
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Āi... āi...</div>
-          <div class="chinese">哎…哎…</div>
+  <div class="main">
+    <a href="https://pinyinhub.replit.app/browse" class="back-button">
+      ← Back to songs
+    </a>
+    
+    <!-- Song header -->
+    <div class="song-header">
+      <div class="song-cover">
+        <img src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400" alt="家在东北 by 庞龙">
+        <div class="song-cover-overlay"></div>
+        <div class="song-info">
+          <h1 class="song-title">家在东北</h1>
+          
+          <p class="song-artist">庞龙</p>
+          
+          <div class="song-meta">
+            <span class="song-genre">Chinese Music</span>
+            <span class="song-views">3 views</span>
+          </div>
         </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Hēi... hēi yō</div>
-          <div class="chinese">嘿…嘿哟</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Wǒ de jiā zài dōngběi</div>
-          <div class="chinese">我的家在东北</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Sōnghuā Jiāng shàng a</div>
-          <div class="chinese">松花江上啊</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Nàlǐ yǒu mǎn shān biàn yě dàdòu gāoliáng</div>
-          <div class="chinese">那里有满山遍野大豆高粱</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Zài nà qīngshān lǜshuǐ páng</div>
-          <div class="chinese">在那青山绿水旁</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Mén qián liǎng kē dà báiyáng</div>
-          <div class="chinese">门前两棵大白杨</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Qí zhěngzhěng de líbā yuàn</div>
-          <div class="chinese">齐整整的篱笆院</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Yī jiān xiǎo cǎofáng a</div>
-          <div class="chinese">一间小草房啊</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Āi...</div>
-          <div class="chinese">哎…</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Wǒ bàba yǒu shì méi shì</div>
-          <div class="chinese">我爸爸有事没事</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Zǒng xiǎng hē diǎn jiǔ</div>
-          <div class="chinese">总想喝点酒</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Jiùsuàn shì méiyǒu cài nà yě děi hē èr liǎng</div>
-          <div class="chinese">就算是没有菜那也得喝二两</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Dà wǎn chá dà wǎn de jiǔ</div>
-          <div class="chinese">大碗茶大碗的酒</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Zuǒ lín yòu shè zài liǎng páng</div>
-          <div class="chinese">左邻右舍在两旁</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Wǔ kuí shǒu liù liù liù</div>
-          <div class="chinese">五魁首六六六</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Xiàoshēng mǎn táng a</div>
-          <div class="chinese">笑声满堂啊</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Āi... yō</div>
-          <div class="chinese">哎…哟</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Wǒ māmā cóng xiǎo sǎngmén jiù liàng a</div>
-          <div class="chinese">我妈妈从小嗓门就亮啊</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Měitiān tā hē zhe shāngē qù xuétáng</div>
-          <div class="chinese">每天她喝着山歌去学堂</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Zhí chàng dé lǎo dàyé</div>
-          <div class="chinese">直唱得老大爷</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Fàngxià le tā de dà yāndài</div>
-          <div class="chinese">放下了他的大烟袋</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Zhí chàng dé xiǎohuǒzi</div>
-          <div class="chinese">直唱得小伙子</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Gèng jiā sīniàn tā gūniang</div>
-          <div class="chinese">更加思念他姑娘</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Zhí chàng dé lǎo dànniáng</div>
-          <div class="chinese">直唱得大娘</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Fàngxià zhēnxiàn tīng yí duàn</div>
-          <div class="chinese">放下针线听一段</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Zhí chàng dé dà gūniang</div>
-          <div class="chinese">直唱得大姑娘</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Yǎnlèi wāng wāng a</div>
-          <div class="chinese">眼泪汪汪啊</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Wàngjì le xǐ yīcháng</div>
-          <div class="chinese">忘记了洗衣裳</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Āi... yō</div>
-          <div class="chinese">哎…哟</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Āi...</div>
-          <div class="chinese">哎…</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Wǒ de jiā zài dōngběi</div>
-          <div class="chinese">我的家在东北</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Wǒ de jiā zài dōngběi</div>
-          <div class="chinese">我的家在东北</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Wǒ de jiā zài dōngběi</div>
-          <div class="chinese">我的家在东北</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Sōnghuā Jiāng shàng a</div>
-          <div class="chinese">松花江上啊</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Nàlǐ yǒu mǎn shān biàn yě dàdòu gāoliáng</div>
-          <div class="chinese">那里有满山遍野大豆高粱</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Zài nà qīngshān lǜshuǐ páng</div>
-          <div class="chinese">在那青山绿水旁</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Mén qián liǎng kē dà báiyáng</div>
-          <div class="chinese">门前两棵大白杨</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Qí zhěngzhěng de líbā yuàn</div>
-          <div class="chinese">齐整整的篱笆院</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Yī jiān xiǎo cǎofáng a</div>
-          <div class="chinese">一间小草房啊</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Āi... yō</div>
-          <div class="chinese">哎…哟</div>
-        </div>
-        
-        <div class="lyrics-line">
-          <div class="pinyin">Wǒ de jiā zài dōngběi</div>
-          <div class="chinese">我的家在东北</div>
-        </div>
-        
       </div>
     </div>
     
-    <div class="section">
-      <h2 class="section-title">English Translation</h2>
-      <div class="lyrics-container">
+    <!-- Song content with tabs -->
+    <div class="song-content">
+      <div class="tabs">
+        <div class="tab active" id="tab-pinyin">Pinyin</div>
+        <div class="tab" id="tab-chinese">简体</div>
+        <div class="tab" id="tab-english">English/Chinese</div>
+      </div>
+      
+      <!-- Pinyin tab content -->
+      <div class="tab-content lyrics-text" id="content-pinyin">
         
-        <div class="english">Ai... ai...</div>
+        <div>
+          <span class="pinyin">Āi... āi...</span>
+          <span class="chinese">哎…哎…</span>
+        </div>
         
-        <div class="english">Hey... hey yo</div>
+        <div>
+          <span class="pinyin">Hēi... hēi yō</span>
+          <span class="chinese">嘿…嘿哟</span>
+        </div>
         
-        <div class="english">My home is in the Northeast</div>
+        <div>
+          <span class="pinyin">Wǒ de jiā zài dōngběi</span>
+          <span class="chinese">我的家在东北</span>
+        </div>
         
-        <div class="english">On the Songhua River</div>
+        <div>
+          <span class="pinyin">Sōnghuā Jiāng shàng a</span>
+          <span class="chinese">松花江上啊</span>
+        </div>
         
-        <div class="english">There are soybeans and sorghum all over the mountains and fields</div>
+        <div>
+          <span class="pinyin">Nàlǐ yǒu mǎn shān biàn yě dàdòu gāoliáng</span>
+          <span class="chinese">那里有满山遍野大豆高粱</span>
+        </div>
         
-        <div class="english">Beside the green mountains and clear waters</div>
+        <div>
+          <span class="pinyin">Zài nà qīngshān lǜshuǐ páng</span>
+          <span class="chinese">在那青山绿水旁</span>
+        </div>
         
-        <div class="english">In front of the door stand two big poplars</div>
+        <div>
+          <span class="pinyin">Mén qián liǎng kē dà báiyáng</span>
+          <span class="chinese">门前两棵大白杨</span>
+        </div>
         
-        <div class="english">A neat and tidy fenced yard</div>
+        <div>
+          <span class="pinyin">Qí zhěngzhěng de líbā yuàn</span>
+          <span class="chinese">齐整整的篱笆院</span>
+        </div>
         
-        <div class="english">A small thatched cottage</div>
+        <div>
+          <span class="pinyin">Yī jiān xiǎo cǎofáng a</span>
+          <span class="chinese">一间小草房啊</span>
+        </div>
         
-        <div class="english">Ai...</div>
+        <div>
+          <span class="pinyin">Āi...</span>
+          <span class="chinese">哎…</span>
+        </div>
         
-        <div class="english">My father, whether busy or not</div>
+        <div>
+          <span class="pinyin">Wǒ bàba yǒu shì méi shì</span>
+          <span class="chinese">我爸爸有事没事</span>
+        </div>
         
-        <div class="english">Always wants to drink some wine</div>
+        <div>
+          <span class="pinyin">Zǒng xiǎng hē diǎn jiǔ</span>
+          <span class="chinese">总想喝点酒</span>
+        </div>
         
-        <div class="english">Even if there's no food, he still drinks two liang</div>
+        <div>
+          <span class="pinyin">Jiùsuàn shì méiyǒu cài nà yě děi hē èr liǎng</span>
+          <span class="chinese">就算是没有菜那也得喝二两</span>
+        </div>
         
-        <div class="english">Big bowls of tea and big bowls of wine</div>
+        <div>
+          <span class="pinyin">Dà wǎn chá dà wǎn de jiǔ</span>
+          <span class="chinese">大碗茶大碗的酒</span>
+        </div>
         
-        <div class="english">Neighbors stand on both sides</div>
+        <div>
+          <span class="pinyin">Zuǒ lín yòu shè zài liǎng páng</span>
+          <span class="chinese">左邻右舍在两旁</span>
+        </div>
         
-        <div class="english">Five leaders, six six six</div>
+        <div>
+          <span class="pinyin">Wǔ kuí shǒu liù liù liù</span>
+          <span class="chinese">五魁首六六六</span>
+        </div>
         
-        <div class="english">Laughter fills the hall</div>
+        <div>
+          <span class="pinyin">Xiàoshēng mǎn táng a</span>
+          <span class="chinese">笑声满堂啊</span>
+        </div>
         
-        <div class="english">Ai... yo</div>
+        <div>
+          <span class="pinyin">Āi... yō</span>
+          <span class="chinese">哎…哟</span>
+        </div>
         
-        <div class="english">My mother has had a loud voice since childhood</div>
+        <div>
+          <span class="pinyin">Wǒ māmā cóng xiǎo sǎngmén jiù liàng a</span>
+          <span class="chinese">我妈妈从小嗓门就亮啊</span>
+        </div>
         
-        <div class="english">Every day she sang mountain songs on her way to school</div>
+        <div>
+          <span class="pinyin">Měitiān tā hē zhe shāngē qù xuétáng</span>
+          <span class="chinese">每天她喝着山歌去学堂</span>
+        </div>
         
-        <div class="english">Singing straight to the old man</div>
+        <div>
+          <span class="pinyin">Zhí chàng dé lǎo dàyé</span>
+          <span class="chinese">直唱得老大爷</span>
+        </div>
         
-        <div class="english">Who put down his big tobacco pipe</div>
+        <div>
+          <span class="pinyin">Fàngxià le tā de dà yāndài</span>
+          <span class="chinese">放下了他的大烟袋</span>
+        </div>
         
-        <div class="english">Singing straight to the young man</div>
+        <div>
+          <span class="pinyin">Zhí chàng dé xiǎohuǒzi</span>
+          <span class="chinese">直唱得小伙子</span>
+        </div>
         
-        <div class="english">Making him miss his girl even more</div>
+        <div>
+          <span class="pinyin">Gèng jiā sīniàn tā gūniang</span>
+          <span class="chinese">更加思念他姑娘</span>
+        </div>
         
-        <div class="english">Singing straight to the old lady</div>
+        <div>
+          <span class="pinyin">Zhí chàng dé lǎo dànniáng</span>
+          <span class="chinese">直唱得大娘</span>
+        </div>
         
-        <div class="english">Who put down her needlework to listen</div>
+        <div>
+          <span class="pinyin">Fàngxià zhēnxiàn tīng yí duàn</span>
+          <span class="chinese">放下针线听一段</span>
+        </div>
         
-        <div class="english">Singing straight to the young girl</div>
+        <div>
+          <span class="pinyin">Zhí chàng dé dà gūniang</span>
+          <span class="chinese">直唱得大姑娘</span>
+        </div>
         
-        <div class="english">With tears streaming down her face</div>
+        <div>
+          <span class="pinyin">Yǎnlèi wāng wāng a</span>
+          <span class="chinese">眼泪汪汪啊</span>
+        </div>
         
-        <div class="english">Forgetting to do the laundry</div>
+        <div>
+          <span class="pinyin">Wàngjì le xǐ yīcháng</span>
+          <span class="chinese">忘记了洗衣裳</span>
+        </div>
         
-        <div class="english">Ai... yo</div>
+        <div>
+          <span class="pinyin">Āi... yō</span>
+          <span class="chinese">哎…哟</span>
+        </div>
         
-        <div class="english">Ai...</div>
+        <div>
+          <span class="pinyin">Āi...</span>
+          <span class="chinese">哎…</span>
+        </div>
         
-        <div class="english">My home is in the Northeast</div>
+        <div>
+          <span class="pinyin">Wǒ de jiā zài dōngběi</span>
+          <span class="chinese">我的家在东北</span>
+        </div>
         
-        <div class="english">My home is in the Northeast</div>
+        <div>
+          <span class="pinyin">Wǒ de jiā zài dōngběi</span>
+          <span class="chinese">我的家在东北</span>
+        </div>
         
-        <div class="english">My home is in the Northeast</div>
+        <div>
+          <span class="pinyin">Wǒ de jiā zài dōngběi</span>
+          <span class="chinese">我的家在东北</span>
+        </div>
         
-        <div class="english">On the Songhua River</div>
+        <div>
+          <span class="pinyin">Sōnghuā Jiāng shàng a</span>
+          <span class="chinese">松花江上啊</span>
+        </div>
         
-        <div class="english">There are soybeans and sorghum all over the mountains and fields</div>
+        <div>
+          <span class="pinyin">Nàlǐ yǒu mǎn shān biàn yě dàdòu gāoliáng</span>
+          <span class="chinese">那里有满山遍野大豆高粱</span>
+        </div>
         
-        <div class="english">Beside the green mountains and clear waters</div>
+        <div>
+          <span class="pinyin">Zài nà qīngshān lǜshuǐ páng</span>
+          <span class="chinese">在那青山绿水旁</span>
+        </div>
         
-        <div class="english">In front of the door stand two big poplars</div>
+        <div>
+          <span class="pinyin">Mén qián liǎng kē dà báiyáng</span>
+          <span class="chinese">门前两棵大白杨</span>
+        </div>
         
-        <div class="english">A neat and tidy fenced yard</div>
+        <div>
+          <span class="pinyin">Qí zhěngzhěng de líbā yuàn</span>
+          <span class="chinese">齐整整的篱笆院</span>
+        </div>
         
-        <div class="english">A small thatched cottage</div>
+        <div>
+          <span class="pinyin">Yī jiān xiǎo cǎofáng a</span>
+          <span class="chinese">一间小草房啊</span>
+        </div>
         
-        <div class="english">Ai... yo</div>
+        <div>
+          <span class="pinyin">Āi... yō</span>
+          <span class="chinese">哎…哟</span>
+        </div>
         
-        <div class="english">My home is in the Northeast</div>
+        <div>
+          <span class="pinyin">Wǒ de jiā zài dōngběi</span>
+          <span class="chinese">我的家在东北</span>
+        </div>
         
+      </div>
+      
+      <!-- Chinese tab content (hidden by default) -->
+      <div class="tab-content lyrics-text" id="content-chinese" style="display: none;">
+        
+        <p class="chinese">哎…哎…</p>
+        
+        <p class="chinese">嘿…嘿哟</p>
+        
+        <p class="chinese">我的家在东北</p>
+        
+        <p class="chinese">松花江上啊</p>
+        
+        <p class="chinese">那里有满山遍野大豆高粱</p>
+        
+        <p class="chinese">在那青山绿水旁</p>
+        
+        <p class="chinese">门前两棵大白杨</p>
+        
+        <p class="chinese">齐整整的篱笆院</p>
+        
+        <p class="chinese">一间小草房啊</p>
+        
+        <p class="chinese">哎…</p>
+        
+        <p class="chinese">我爸爸有事没事</p>
+        
+        <p class="chinese">总想喝点酒</p>
+        
+        <p class="chinese">就算是没有菜那也得喝二两</p>
+        
+        <p class="chinese">大碗茶大碗的酒</p>
+        
+        <p class="chinese">左邻右舍在两旁</p>
+        
+        <p class="chinese">五魁首六六六</p>
+        
+        <p class="chinese">笑声满堂啊</p>
+        
+        <p class="chinese">哎…哟</p>
+        
+        <p class="chinese">我妈妈从小嗓门就亮啊</p>
+        
+        <p class="chinese">每天她喝着山歌去学堂</p>
+        
+        <p class="chinese">直唱得老大爷</p>
+        
+        <p class="chinese">放下了他的大烟袋</p>
+        
+        <p class="chinese">直唱得小伙子</p>
+        
+        <p class="chinese">更加思念他姑娘</p>
+        
+        <p class="chinese">直唱得老大娘</p>
+        
+        <p class="chinese">放下针线听一段</p>
+        
+        <p class="chinese">直唱得大姑娘</p>
+        
+        <p class="chinese">眼泪汪汪啊</p>
+        
+        <p class="chinese">忘记了洗衣裳</p>
+        
+        <p class="chinese">哎…哟</p>
+        
+        <p class="chinese">哎…</p>
+        
+        <p class="chinese">我的家在东北</p>
+        
+        <p class="chinese">我的家在东北</p>
+        
+        <p class="chinese">我的家在东北</p>
+        
+        <p class="chinese">松花江上啊</p>
+        
+        <p class="chinese">那里有满山遍野大豆高粱</p>
+        
+        <p class="chinese">在那青山绿水旁</p>
+        
+        <p class="chinese">门前两棵大白杨</p>
+        
+        <p class="chinese">齐整整的篱笆院</p>
+        
+        <p class="chinese">一间小草房啊</p>
+        
+        <p class="chinese">哎…哟</p>
+        
+        <p class="chinese">我的家在东北</p>
+        
+      </div>
+      
+      <!-- English/Chinese tab content (hidden by default) -->
+      <div class="tab-content lyrics-text" id="content-english" style="display: none;">
+        <div class="columns">
+          <div>
+            
+            <p class="chinese">哎…哎…</p>
+            
+            <p class="chinese">嘿…嘿哟</p>
+            
+            <p class="chinese">我的家在东北</p>
+            
+            <p class="chinese">松花江上啊</p>
+            
+            <p class="chinese">那里有满山遍野大豆高粱</p>
+            
+            <p class="chinese">在那青山绿水旁</p>
+            
+            <p class="chinese">门前两棵大白杨</p>
+            
+            <p class="chinese">齐整整的篱笆院</p>
+            
+            <p class="chinese">一间小草房啊</p>
+            
+            <p class="chinese">哎…</p>
+            
+            <p class="chinese">我爸爸有事没事</p>
+            
+            <p class="chinese">总想喝点酒</p>
+            
+            <p class="chinese">就算是没有菜那也得喝二两</p>
+            
+            <p class="chinese">大碗茶大碗的酒</p>
+            
+            <p class="chinese">左邻右舍在两旁</p>
+            
+            <p class="chinese">五魁首六六六</p>
+            
+            <p class="chinese">笑声满堂啊</p>
+            
+            <p class="chinese">哎…哟</p>
+            
+            <p class="chinese">我妈妈从小嗓门就亮啊</p>
+            
+            <p class="chinese">每天她喝着山歌去学堂</p>
+            
+            <p class="chinese">直唱得老大爷</p>
+            
+            <p class="chinese">放下了他的大烟袋</p>
+            
+            <p class="chinese">直唱得小伙子</p>
+            
+            <p class="chinese">更加思念他姑娘</p>
+            
+            <p class="chinese">直唱得老大娘</p>
+            
+            <p class="chinese">放下针线听一段</p>
+            
+            <p class="chinese">直唱得大姑娘</p>
+            
+            <p class="chinese">眼泪汪汪啊</p>
+            
+            <p class="chinese">忘记了洗衣裳</p>
+            
+            <p class="chinese">哎…哟</p>
+            
+            <p class="chinese">哎…</p>
+            
+            <p class="chinese">我的家在东北</p>
+            
+            <p class="chinese">我的家在东北</p>
+            
+            <p class="chinese">我的家在东北</p>
+            
+            <p class="chinese">松花江上啊</p>
+            
+            <p class="chinese">那里有满山遍野大豆高粱</p>
+            
+            <p class="chinese">在那青山绿水旁</p>
+            
+            <p class="chinese">门前两棵大白杨</p>
+            
+            <p class="chinese">齐整整的篱笆院</p>
+            
+            <p class="chinese">一间小草房啊</p>
+            
+            <p class="chinese">哎…哟</p>
+            
+            <p class="chinese">我的家在东北</p>
+            
+          </div>
+          <div>
+            
+            <p class="english">Ai... ai...</p>
+            
+            <p class="english">Hey... hey yo</p>
+            
+            <p class="english">My home is in the Northeast</p>
+            
+            <p class="english">On the Songhua River</p>
+            
+            <p class="english">There are soybeans and sorghum all over the mountains and fields</p>
+            
+            <p class="english">Beside the green mountains and clear waters</p>
+            
+            <p class="english">In front of the door stand two big poplars</p>
+            
+            <p class="english">A neat and tidy fenced yard</p>
+            
+            <p class="english">A small thatched cottage</p>
+            
+            <p class="english">Ai...</p>
+            
+            <p class="english">My father, whether busy or not</p>
+            
+            <p class="english">Always wants to drink some wine</p>
+            
+            <p class="english">Even if there's no food, he still drinks two liang</p>
+            
+            <p class="english">Big bowls of tea and big bowls of wine</p>
+            
+            <p class="english">Neighbors stand on both sides</p>
+            
+            <p class="english">Five leaders, six six six</p>
+            
+            <p class="english">Laughter fills the hall</p>
+            
+            <p class="english">Ai... yo</p>
+            
+            <p class="english">My mother has had a loud voice since childhood</p>
+            
+            <p class="english">Every day she sang mountain songs on her way to school</p>
+            
+            <p class="english">Singing straight to the old man</p>
+            
+            <p class="english">Who put down his big tobacco pipe</p>
+            
+            <p class="english">Singing straight to the young man</p>
+            
+            <p class="english">Making him miss his girl even more</p>
+            
+            <p class="english">Singing straight to the old lady</p>
+            
+            <p class="english">Who put down her needlework to listen</p>
+            
+            <p class="english">Singing straight to the young girl</p>
+            
+            <p class="english">With tears streaming down her face</p>
+            
+            <p class="english">Forgetting to do the laundry</p>
+            
+            <p class="english">Ai... yo</p>
+            
+            <p class="english">Ai...</p>
+            
+            <p class="english">My home is in the Northeast</p>
+            
+            <p class="english">My home is in the Northeast</p>
+            
+            <p class="english">My home is in the Northeast</p>
+            
+            <p class="english">On the Songhua River</p>
+            
+            <p class="english">There are soybeans and sorghum all over the mountains and fields</p>
+            
+            <p class="english">Beside the green mountains and clear waters</p>
+            
+            <p class="english">In front of the door stand two big poplars</p>
+            
+            <p class="english">A neat and tidy fenced yard</p>
+            
+            <p class="english">A small thatched cottage</p>
+            
+            <p class="english">Ai... yo</p>
+            
+            <p class="english">My home is in the Northeast</p>
+            
+          </div>
+        </div>
+      </div>
+      
+      <!-- Actions -->
+      <div class="actions">
+        <a href="https://pinyinhub.replit.app/songs/4" class="favorite-button">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+          </svg>
+          Favorite
+        </a>
+        <div class="date-added">
+          Added on 5/14/2025
+        </div>
       </div>
     </div>
     
     <a href="https://pinyinhub.replit.app/songs/4" class="app-link">
       View This Song in the PinyinHub App
     </a>
-  </main>
+  </div>
   
-  <footer>
-    <p class="metadata">
-      Added on 5/14/2025 | 
-      Views: 3 | 
-      Genre: Chinese Music
-    </p>
-  </footer>
+  <div class="footer">
+    <p>© 2025 PinyinHub - Learn Chinese Through Music</p>
+  </div>
   
   <!-- Hidden lyrics content for search engines -->
   <div style="display:none" aria-hidden="true">
     哎…哎…, 嘿…嘿哟, 我的家在东北, 松花江上啊, 那里有满山遍野大豆高粱, 在那青山绿水旁, 门前两棵大白杨, 齐整整的篱笆院, 一间小草房啊, 哎…, 我爸爸有事没事, 总想喝点酒, 就算是没有菜那也得喝二两, 大碗茶大碗的酒, 左邻右舍在两旁, 五魁首六六六, 笑声满堂啊, 哎…哟, 我妈妈从小嗓门就亮啊, 每天她喝着山歌去学堂, 直唱得老大爷, 放下了他的大烟袋, 直唱得小伙子, 更加思念他姑娘, 直唱得老大娘, 放下针线听一段, 直唱得
   </div>
+  
+  <!-- Simple tab switching script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const tabs = document.querySelectorAll('.tab');
+      const contents = document.querySelectorAll('.tab-content');
+      
+      tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          // Remove active class from all tabs
+          tabs.forEach(t => t.classList.remove('active'));
+          // Add active class to clicked tab
+          this.classList.add('active');
+          
+          // Hide all tab contents
+          contents.forEach(content => content.style.display = 'none');
+          
+          // Show the corresponding content
+          const contentId = 'content-' + this.id.split('-')[1];
+          document.getElementById(contentId).style.display = 'block';
+        });
+      });
+    });
+  </script>
 </body>
 </html>
