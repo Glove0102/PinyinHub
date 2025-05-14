@@ -26,6 +26,52 @@ export default function BrowseSongs() {
       setSearchTerm(searchParam);
     }
   }, [location]);
+  
+  // Set SEO metadata for browse page
+  useEffect(() => {
+    // Set page title based on search or browse context
+    document.title = searchTerm 
+      ? `Search Results for "${searchTerm}" | PinyinHub` 
+      : "Browse Chinese Songs with Pinyin | PinyinHub";
+    
+    // Update meta description
+    const metaDescription = document.querySelector('meta[name="description"]');
+    const description = searchTerm
+      ? `Find Chinese songs matching "${searchTerm}" with pinyin and English translations on PinyinHub.`
+      : "Browse a collection of Chinese songs with pinyin transliteration and English translations. Learn Chinese through music on PinyinHub.";
+    
+    if (metaDescription) {
+      metaDescription.setAttribute('content', description);
+    } else {
+      const meta = document.createElement('meta');
+      meta.name = 'description';
+      meta.content = description;
+      document.head.appendChild(meta);
+    }
+    
+    // Add Open Graph tags for social media sharing
+    const setMetaTag = (property: string, content: string) => {
+      let meta = document.querySelector(`meta[property="${property}"]`);
+      if (meta) {
+        meta.setAttribute('content', content);
+      } else {
+        meta = document.createElement('meta');
+        meta.setAttribute('property', property);
+        meta.setAttribute('content', content);
+        document.head.appendChild(meta);
+      }
+    };
+    
+    const title = searchTerm 
+      ? `Search Results for "${searchTerm}" | PinyinHub` 
+      : "Browse Chinese Songs with Pinyin | PinyinHub";
+      
+    setMetaTag('og:title', title);
+    setMetaTag('og:description', description);
+    setMetaTag('og:image', "https://images.unsplash.com/photo-1507838153414-b4b713384a76?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=600");
+    setMetaTag('og:url', window.location.href);
+    setMetaTag('og:type', 'website');
+  }, [searchTerm]);
 
   // Determine if we're searching or browsing
   const isSearching = searchTerm.trim().length > 0;

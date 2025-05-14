@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { Heart } from "lucide-react";
+import { useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/layout/header";
@@ -10,6 +11,44 @@ import { SongTabs } from "@/components/songs/song-tabs";
 import { Song } from "@shared/schema";
 
 export default function HomePage() {
+  // Set SEO metadata for home page
+  useEffect(() => {
+    // Set page title
+    document.title = "PinyinHub - Learn Chinese Through Music";
+    
+    // Update meta description
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', 
+        "PinyinHub helps you understand Chinese songs with pinyin transliteration and English translations. Learn Chinese through music."
+      );
+    } else {
+      const meta = document.createElement('meta');
+      meta.name = 'description';
+      meta.content = "PinyinHub helps you understand Chinese songs with pinyin transliteration and English translations. Learn Chinese through music.";
+      document.head.appendChild(meta);
+    }
+    
+    // Add Open Graph tags for social media sharing
+    const setMetaTag = (property: string, content: string) => {
+      let meta = document.querySelector(`meta[property="${property}"]`);
+      if (meta) {
+        meta.setAttribute('content', content);
+      } else {
+        meta = document.createElement('meta');
+        meta.setAttribute('property', property);
+        meta.setAttribute('content', content);
+        document.head.appendChild(meta);
+      }
+    };
+    
+    setMetaTag('og:title', "PinyinHub - Learn Chinese Through Music");
+    setMetaTag('og:description', "Learn Chinese through music with lyrics, pinyin, and English translations");
+    setMetaTag('og:image', "https://images.unsplash.com/photo-1507838153414-b4b713384a76?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=600");
+    setMetaTag('og:url', window.location.href);
+    setMetaTag('og:type', 'website');
+  }, []);
+
   // Fetch featured song (for demo, we'll just fetch the first song)
   const { data: featuredSong, isLoading: isFeaturedLoading } = useQuery<Song[]>({
     queryKey: ["/api/songs"],

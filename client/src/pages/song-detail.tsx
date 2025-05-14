@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams, Link } from "wouter";
 import { Loader2, Heart, ChevronLeft } from "lucide-react";
+import { useEffect } from "react";
 
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
@@ -15,6 +16,64 @@ export default function SongDetail() {
   const { data: song, isLoading, error } = useQuery<Song>({
     queryKey: [`/api/songs/${songId}`],
   });
+  
+  // Update page metadata for SEO
+  useEffect(() => {
+    if (song) {
+      // Set page title
+      document.title = `${song.titleChinese || song.title} - ${song.artistChinese || song.artist} | PinyinHub`;
+      
+      // Update meta tags
+      const metaDescription = document.querySelector('meta[name="description"]');
+      if (metaDescription) {
+        metaDescription.setAttribute('content', 
+          `Learn ${song.titleChinese || song.title} by ${song.artistChinese || song.artist} with pinyin and English translation on PinyinHub.`
+        );
+      } else {
+        const meta = document.createElement('meta');
+        meta.name = 'description';
+        meta.content = `Learn ${song.titleChinese || song.title} by ${song.artistChinese || song.artist} with pinyin and English translation on PinyinHub.`;
+        document.head.appendChild(meta);
+      }
+      
+      // Add Open Graph tags for social media sharing
+      setOpenGraphTags({
+        title: `${song.titleChinese || song.title} - ${song.artistChinese || song.artist}`,
+        description: `Learn Chinese with lyrics, pinyin, and English translation for ${song.title} by ${song.artist}`,
+        image: getBackgroundImage(song.id),
+        url: window.location.href
+      });
+    }
+    
+    // Cleanup function to restore default title
+    return () => {
+      document.title = 'PinyinHub - Learn Chinese Through Music';
+    };
+  }, [song]);
+  
+  // Helper function to set Open Graph tags
+  const setOpenGraphTags = ({ title, description, image, url }: { 
+    title: string, description: string, image: string, url: string 
+  }) => {
+    // Helper to create or update meta tags
+    const setMetaTag = (property: string, content: string) => {
+      let meta = document.querySelector(`meta[property="${property}"]`);
+      if (meta) {
+        meta.setAttribute('content', content);
+      } else {
+        meta = document.createElement('meta');
+        meta.setAttribute('property', property);
+        meta.setAttribute('content', content);
+        document.head.appendChild(meta);
+      }
+    };
+    
+    setMetaTag('og:title', title);
+    setMetaTag('og:description', description);
+    setMetaTag('og:image', image);
+    setMetaTag('og:url', url);
+    setMetaTag('og:type', 'website');
+  };
 
   if (isLoading) {
     return (
