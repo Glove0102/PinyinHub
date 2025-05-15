@@ -84,7 +84,7 @@ export default function HomePage() {
                   </Button>
                 </Link>
                 <Link href="/add-song">
-                  <Button size="lg" className="w-full sm:w-auto">
+                  <Button size="lg" className="w-full sm:w-auto bg-black border border-white">
                     Add a Song
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 ml-2">
                       <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
@@ -92,48 +92,6 @@ export default function HomePage() {
                   </Button>
                 </Link>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Features */}
-        <section className="mb-16 px-4 py-8">
-          <h2 className="text-2xl font-bold text-center text-gray-900 mb-8">Discover the Features</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <div className="flex items-center justify-center h-12 w-12 rounded-md bg-primary text-white mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
-                  <path d="M9 18V5l12-2v13" />
-                  <circle cx="6" cy="18" r="3" />
-                  <circle cx="18" cy="16" r="3" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Pinyin Transliteration</h3>
-              <p className="text-gray-600">View Chinese lyrics with accurate pinyin transliteration including tone marks to help with pronunciation.</p>
-            </div>
-            
-            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <div className="flex items-center justify-center h-12 w-12 rounded-md bg-green-500 text-white mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
-                  <path d="M5 8l5 3l5 -3l5 3v6l-5 3l-5 -3l-5 3v-6l5 -3z"></path>
-                  <path d="M10 6l5 -3l5 3"></path>
-                </svg>
-              </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">English Translation</h3>
-              <p className="text-gray-600">Read accurate English translations alongside the original Chinese lyrics to understand the meaning.</p>
-            </div>
-            
-            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <div className="flex items-center justify-center h-12 w-12 rounded-md bg-amber-500 text-white mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
-                  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                  <circle cx="8.5" cy="7" r="4" />
-                  <path d="M20 8v6" />
-                  <path d="M23 11h-6" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Contribute Songs</h3>
-              <p className="text-gray-600">Register and add your favorite Chinese songs to help expand our community library.</p>
             </div>
           </div>
         </section>
@@ -261,74 +219,50 @@ export default function HomePage() {
             </div>
           )}
         </section>
-        
-        {/* How It Works */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">How PinyinHub Works</h2>
-          
-          <div className="relative">
-            {/* Timeline line */}
-            <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-gray-200"></div>
-            
-            <div className="space-y-12 relative">
-              {/* Step 1 */}
-              <div className="md:flex md:items-center">
-                <div className="md:w-1/2 pr-8 md:text-right">
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">Submit Chinese Lyrics</h3>
-                  <p className="text-gray-600">Paste the original Chinese lyrics of your favorite song. We support both Simplified and Traditional characters.</p>
-                </div>
-                <div className="mx-auto md:mx-0 my-4 md:my-0 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary-100 border-4 border-white relative z-10">
-                  <span className="text-primary font-bold">1</span>
-                </div>
-                <div className="md:w-1/2 pl-8 hidden md:block">
-                  <img src="https://images.unsplash.com/photo-1544476915-ed1370594142?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300" alt="Chinese document" className="rounded-lg shadow-md" />
-                </div>
+
+        {/* Features */}
+        <section className="mb-16 px-4 py-8">
+          <h2 className="text-2xl font-bold text-center text-gray-900 mb-8">Discover the Features</h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+              <div className="flex items-center justify-center h-12 w-12 rounded-md bg-primary text-white mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
+                  <path d="M9 18V5l12-2v13" />
+                  <circle cx="6" cy="18" r="3" />
+                  <circle cx="18" cy="16" r="3" />
+                </svg>
               </div>
-              
-              {/* Step 2 */}
-              <div className="md:flex md:items-center">
-                <div className="md:w-1/2 pr-8 hidden md:block md:text-right">
-                  <img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300" alt="Translation concept" className="rounded-lg shadow-md ml-auto" />
-                </div>
-                <div className="mx-auto md:mx-0 my-4 md:my-0 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary-100 border-4 border-white relative z-10">
-                  <span className="text-primary font-bold">2</span>
-                </div>
-                <div className="md:w-1/2 pl-8">
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">AI-Powered Processing</h3>
-                  <p className="text-gray-600">Our system automatically generates Pinyin with tone marks and provides an accurate English translation.</p>
-                </div>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">Pinyin Transliteration</h3>
+              <p className="text-gray-600">View Chinese lyrics with accurate pinyin transliteration including tone marks to help with pronunciation.</p>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+              <div className="flex items-center justify-center h-12 w-12 rounded-md bg-green-500 text-white mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
+                  <path d="M5 8l5 3l5 -3l5 3v6l-5 3l-5 -3l-5 3v-6l5 -3z"></path>
+                  <path d="M10 6l5 -3l5 3"></path>
+                </svg>
               </div>
-              
-              {/* Step 3 */}
-              <div className="md:flex md:items-center">
-                <div className="md:w-1/2 pr-8 md:text-right">
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">Review and Publish</h3>
-                  <p className="text-gray-600">Review the generated content for accuracy and make any necessary adjustments before publishing.</p>
-                </div>
-                <div className="mx-auto md:mx-0 my-4 md:my-0 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary-100 border-4 border-white relative z-10">
-                  <span className="text-primary font-bold">3</span>
-                </div>
-                <div className="md:w-1/2 pl-8 hidden md:block">
-                  <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300" alt="Person reviewing content" className="rounded-lg shadow-md" />
-                </div>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">English Translation</h3>
+              <p className="text-gray-600">Read accurate English translations alongside the original Chinese lyrics to understand the meaning.</p>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+              <div className="flex items-center justify-center h-12 w-12 rounded-md bg-amber-500 text-white mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                  <circle cx="8.5" cy="7" r="4" />
+                  <path d="M20 8v6" />
+                  <path d="M23 11h-6" />
+                </svg>
               </div>
-              
-              {/* Step 4 */}
-              <div className="md:flex md:items-center">
-                <div className="md:w-1/2 pr-8 hidden md:block md:text-right">
-                  <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300" alt="Language learning concept" className="rounded-lg shadow-md ml-auto" />
-                </div>
-                <div className="mx-auto md:mx-0 my-4 md:my-0 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary-100 border-4 border-white relative z-10">
-                  <span className="text-primary font-bold">4</span>
-                </div>
-                <div className="md:w-1/2 pl-8">
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">Help Others Learn</h3>
-                  <p className="text-gray-600">Your contribution helps Chinese learners around the world understand their favorite songs while improving language skills.</p>
-                </div>
-              </div>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">Contribute Songs</h3>
+              <p className="text-gray-600">Register and add your favorite Chinese songs to help expand our community library.</p>
             </div>
           </div>
         </section>
+        
+        
       </main>
       
       <Footer />

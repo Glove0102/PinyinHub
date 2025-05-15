@@ -28,7 +28,7 @@ export default function AddSong() {
         <section id="add-song-section" className="mb-16 bg-white rounded-xl shadow-md overflow-hidden">
           <div className="md:flex">
             {/* Left panel with info */}
-            <div className="md:w-2/5 bg-gradient-to-br from-primary to-primary-800 text-white p-8 flex items-center justify-center">
+            <div className="md:w-2/5 bg-gradient-to-br from-rose-950 to-black text-white p-8 flex items-center justify-center">
               <div className="text-center">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary-200 h-16 w-16 mx-auto mb-4">
                   <path d="M9 18V5l12-2v13"></path>
