@@ -189,7 +189,7 @@ function generateSongHtmlContent(song: any): string {
   <meta property="og:title" content="${metaTitle}">
   <meta property="og:description" content="${metaDescription}">
   <meta property="og:type" content="music.song">
-  <meta property="og:url" content="https://pinyinhub.replit.app/songs/${song.id}">
+  <meta property="og:url" content="https://pinyinhub.com/songs/${song.id}">
   <meta property="og:site_name" content="PinyinHub">
   <meta property="music:musician" content="${song.primaryArtist}">
   
@@ -220,312 +220,13 @@ function generateSongHtmlContent(song: any): string {
   </script>
   
   <!-- App Link -->
-  <link rel="canonical" href="https://pinyinhub.replit.app/songs/${song.id}">
+  <link rel="canonical" href="https://pinyinhub.com/songs/${song.id}">
   
-  <style>
-    /* Base styles */
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      line-height: 1.6;
-      color: #333;
-      margin: 0;
-      padding: 0;
-      background-color: #f5f5f7;
-    }
-    
-    /* Layout */
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 16px;
-    }
-    
-    .header {
-      background-color: #fff;
-      padding: 16px 0;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    }
-    
-    .header-content {
-      display: flex;
-      align-items: center;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 16px;
-    }
-    
-    .logo {
-      display: flex;
-      align-items: center;
-      color: #111;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 1.2rem;
-    }
-    
-    .logo svg {
-      width: 32px;
-      height: 32px;
-      margin-right: 8px;
-      color: #2563eb;
-    }
-    
-    .main {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 32px 16px;
-    }
-    
-    .footer {
-      background-color: #fff;
-      padding: 16px 0;
-      box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.1);
-      margin-top: 32px;
-      text-align: center;
-      font-size: 0.875rem;
-      color: #6b7280;
-    }
-    
-    /* Song header section */
-    .back-button {
-      margin-bottom: 24px;
-      display: inline-block;
-      padding: 8px 12px;
-      font-size: 0.875rem;
-      color: #4b5563;
-      background-color: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 4px;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.2s;
-    }
-    
-    .back-button:hover {
-      background-color: #f9fafb;
-    }
-    
-    .song-header {
-      background-color: #fff;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-      margin-bottom: 32px;
-    }
-    
-    .song-cover {
-      position: relative;
-      height: 320px;
-      overflow: hidden;
-    }
-    
-    .song-cover img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    
-    .song-cover-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.5) 50%, transparent 100%);
-    }
-    
-    .song-info {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 32px;
-      color: #fff;
-    }
-    
-    .song-title {
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-    
-    .song-title-secondary {
-      font-size: 1.5rem;
-      color: #e5e7eb;
-      margin-bottom: 8px;
-    }
-    
-    .song-artist {
-      font-size: 1.25rem;
-      font-weight: 500;
-      color: #d1d5db;
-      margin-bottom: 4px;
-    }
-    
-    .song-artist-secondary {
-      font-size: 1rem;
-      color: #9ca3af;
-    }
-    
-    .song-meta {
-      display: flex;
-      align-items: center;
-      margin-top: 16px;
-    }
-    
-    .song-genre {
-      background-color: rgba(37, 99, 235, 0.8);
-      color: #fff;
-      font-size: 0.75rem;
-      padding: 4px 8px;
-      border-radius: 4px;
-    }
-    
-    .song-views {
-      margin-left: 16px;
-      font-size: 0.875rem;
-      color: #d1d5db;
-    }
-    
-    /* Song content section */
-    .song-content {
-      background-color: #fff;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-      padding: 24px 32px 32px;
-    }
-    
-    /* Tabs */
-    .tabs {
-      border-bottom: 1px solid #e5e7eb;
-      display: flex;
-      margin-bottom: 24px;
-    }
-    
-    .tab {
-      padding: 8px 0;
-      margin-right: 24px;
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: #6b7280;
-      border-bottom: 2px solid transparent;
-      cursor: pointer;
-    }
-    
-    .tab.active {
-      color: #2563eb;
-      border-color: #2563eb;
-    }
-    
-    /* Lyrics content */
-    .tab-content {
-      padding-top: 16px;
-    }
-    
-    .lyrics-text .pinyin {
-      color: #4b5563;
-      display: block;
-      font-size: 0.9rem;
-      line-height: 1.5;
-    }
-    
-    .lyrics-text .chinese {
-      font-size: 1.1rem;
-      line-height: 1.5;
-      display: block;
-      margin-bottom: 16px;
-    }
-    
-    .lyrics-text .english {
-      color: #6b7280;
-      font-style: italic;
-      line-height: 1.5;
-      margin-bottom: 16px;
-    }
-    
-    /* Actions section */
-    .actions {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 32px;
-    }
-    
-    .favorite-button {
-      display: inline-flex;
-      align-items: center;
-      padding: 6px 12px;
-      font-size: 0.875rem;
-      color: #4b5563;
-      background-color: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 4px;
-      cursor: pointer;
-      text-decoration: none;
-    }
-    
-    .favorite-button svg {
-      width: 16px;
-      height: 16px;
-      margin-right: 4px;
-    }
-    
-    .date-added {
-      font-size: 0.875rem;
-      color: #6b7280;
-    }
-    
-    /* App link */
-    .app-link {
-      display: block;
-      text-align: center;
-      margin: 32px auto;
-      max-width: 300px;
-      padding: 16px;
-      background-color: #2563eb;
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: 600;
-      box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
-      transition: all 0.2s;
-    }
-    
-    .app-link:hover {
-      background-color: #1d4ed8;
-      box-shadow: 0 6px 10px -1px rgba(37, 99, 235, 0.3);
-    }
-    
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-      .song-cover {
-        height: 240px;
-      }
-      
-      .song-title {
-        font-size: 1.5rem;
-      }
-      
-      .song-title-secondary {
-        font-size: 1.25rem;
-      }
-      
-      .song-content {
-        padding: 16px 24px 24px;
-      }
-    }
-    
-    /* Side-by-side layout for English/Chinese tab */
-    .columns {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 16px;
-    }
-    
-    @media (min-width: 768px) {
-      .columns {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-  </style>
+  <!-- Google Fonts for Chinese and Pinyin -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans:wght@400;500;700&display=swap">
+  
+  <!-- External CSS -->
+  <link rel="stylesheet" href="/styles/song-page.css">
 </head>
 <body>
   <div class="header">
@@ -541,7 +242,7 @@ function generateSongHtmlContent(song: any): string {
   </div>
   
   <div class="main">
-    <a href="https://pinyinhub.replit.app/browse" class="back-button">
+    <a href="https://pinyinhub.com/browse" class="back-button">
       ← Back to songs
     </a>
     
@@ -606,7 +307,7 @@ function generateSongHtmlContent(song: any): string {
       
       <!-- Actions -->
       <div class="actions">
-        <a href="https://pinyinhub.replit.app/songs/${song.id}" class="favorite-button">
+        <a href="https://pinyinhub.com/songs/${song.id}" class="favorite-button">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
           </svg>
@@ -618,7 +319,7 @@ function generateSongHtmlContent(song: any): string {
       </div>
     </div>
     
-    <a href="https://pinyinhub.replit.app/songs/${song.id}" class="app-link">
+    <a href="https://pinyinhub.com/songs/${song.id}" class="app-link">
       View This Song in the PinyinHub App
     </a>
   </div>

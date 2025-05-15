@@ -6,29 +6,29 @@ import path from 'path';
 async function generateAllSongHtml() {
   try {
     console.log('Starting to generate HTML for all songs...');
-    
+
     // Ensure the directory exists
     const dirPath = path.join(process.cwd(), 'public', 'songs');
     await fs.mkdir(dirPath, { recursive: true });
-    
+
     // Write a simple test file
     const testFilePath = path.join(dirPath, 'test-generated.html');
     await fs.writeFile(testFilePath, '<html><body>Test file generated at ' + new Date().toISOString() + '</body></html>', 'utf-8');
     console.log(`Wrote test file to ${testFilePath}`);
-    
+
     // Get all songs
     const songs = await storage.getSongs(100, 0);
     console.log(`Found ${songs.length} songs`);
-    
+
     // Generate HTML for each song
     for (const song of songs) {
       try {
         console.log(`Processing song ID: ${song.id}, Title: ${song.title}`);
-        
+
         // Create a simple HTML file for the song
         const slug = `${song.id}-${song.title.toLowerCase().replace(/\s+/g, '-')}`;
         const simpleHtmlPath = path.join(dirPath, `${slug}.html`);
-        
+
         const simpleHtml = `<!DOCTYPE html>
 <html>
 <head>
@@ -42,14 +42,20 @@ async function generateAllSongHtml() {
   <p>View this song in the <a href="/songs/${song.id}">PinyinHub application</a>.</p>
   <div>
     <h3>Original Lyrics</h3>
-    <pre>${song.lyrics}</pre>
+        <pre class="chinese">${song.lyrics}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>© ${new Date().getFullYear()} PinyinHub - Learn Chinese Through Music</p>
   </div>
 </body>
 </html>`;
-        
+
         await fs.writeFile(simpleHtmlPath, simpleHtml, 'utf-8');
         console.log(`Created simple HTML file at ${simpleHtmlPath}`);
-        
+
         // Try to generate the full HTML version
         try {
           const htmlPath = await generateSongHtml(song);
@@ -61,7 +67,7 @@ async function generateAllSongHtml() {
         console.error(`Error processing song ${song.id}:`, songError);
       }
     }
-    
+
     console.log('Finished generating HTML for all songs');
   } catch (error) {
     console.error('Error in generateAllSongHtml:', error);
