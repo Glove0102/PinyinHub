@@ -82,7 +82,7 @@ export function MediaLinks({ youtubeLink, spotifyLink }: MediaLinksProps) {
     <>
       <div className="mt-6">
         <h3 className="text-lg font-medium mb-3">Listen to this song</h3>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex justify-center gap-4 mb-6">
           {youtubeLink && (
             <Button 
               variant="outline" 
