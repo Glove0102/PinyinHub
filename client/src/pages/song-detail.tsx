@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { SongTabs } from "@/components/songs/song-tabs";
+import { MediaLinks } from "@/components/songs/media-links";
 import { Button } from "@/components/ui/button";
 import { Song } from "@shared/schema";
 
@@ -181,13 +182,19 @@ export default function SongDetail() {
             {/* Song tabs */}
             <SongTabs song={song} />
             
+            {/* Media Links */}
+            <MediaLinks 
+              youtubeLink={song.youtubeLink} 
+              spotifyLink={song.spotifyLink} 
+            />
+            
             {/* Actions */}
             <div className="mt-8 flex justify-between items-center">
               <Button variant="outline" size="sm" className="flex items-center">
                 <Heart className="h-4 w-4 mr-1" /> Favorite
               </Button>
               <div className="text-sm text-gray-500">
-                Added on {new Date(song.createdAt).toLocaleDateString()}
+                Added on {song.createdAt ? new Date(song.createdAt as string).toLocaleDateString() : 'Unknown date'}
               </div>
             </div>
           </div>
