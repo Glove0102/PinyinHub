@@ -34,6 +34,8 @@ const songFormSchema = z.object({
   artist: z.string().min(1, "Artist name is required"),
   lyrics: z.string().min(10, "Lyrics should be at least 10 characters long"),
   genre: z.string().optional(),
+  youtubeLink: z.string().url("Please enter a valid YouTube URL").optional().or(z.literal("")),
+  spotifyLink: z.string().url("Please enter a valid Spotify URL").optional().or(z.literal("")),
 });
 
 type SongFormValues = z.infer<typeof songFormSchema>;
@@ -50,6 +52,8 @@ export function SongForm() {
       artist: "",
       lyrics: "",
       genre: "",
+      youtubeLink: "",
+      spotifyLink: "",
     },
   });
 
@@ -173,6 +177,48 @@ export function SongForm() {
                   <SelectItem value="other">Other</SelectItem>
                 </SelectContent>
               </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="youtubeLink"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>YouTube Link (Optional)</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="https://www.youtube.com/watch?v=..."
+                  {...field}
+                  disabled={isSubmitting}
+                />
+              </FormControl>
+              <p className="text-xs text-gray-500 mt-1">
+                Paste a link to the song on YouTube
+              </p>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="spotifyLink"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Spotify Link (Optional)</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="https://open.spotify.com/track/..."
+                  {...field}
+                  disabled={isSubmitting}
+                />
+              </FormControl>
+              <p className="text-xs text-gray-500 mt-1">
+                Paste a link to the song on Spotify
+              </p>
               <FormMessage />
             </FormItem>
           )}

@@ -28,6 +28,8 @@ export const songs = pgTable("songs", {
   simplifiedLyrics: text("simplified_lyrics"), // Simplified Chinese version
   pinyinLyrics: jsonb("pinyin_lyrics"),      // Pinyin transliteration (array of lines with pinyin and chinese)
   englishLyrics: jsonb("english_lyrics"),    // English translation (array of lines)
+  youtubeLink: text("youtube_link"),         // YouTube video link
+  spotifyLink: text("spotify_link"),         // Spotify track link
   userId: integer("user_id").notNull().references(() => users.id),
   genre: text("genre"),
   views: integer("views").default(0),
@@ -42,6 +44,8 @@ export const insertSongSchema = createInsertSchema(songs).pick({
   lyrics: true,
   genre: true,
   userId: true,
+  youtubeLink: true,
+  spotifyLink: true,
 });
 
 // Line type for pinyin display
