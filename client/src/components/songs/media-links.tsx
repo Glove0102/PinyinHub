@@ -53,8 +53,8 @@ export function MediaLinks({ youtubeLink, spotifyLink }: MediaLinksProps) {
     if (!showYoutubePlayer || !youtubeVideoId) return null;
     
     return (
-      <div className="fixed bottom-0 left-0 right-0 h-[40vh] z-50 bg-transparent flex flex-col">
-        <div className="bg-white w-full flex justify-between items-center p-2 border-t border-gray-200">
+      <div className="fixed bottom-0 right-0 w-1/2 h-[40vh] z-50 bg-transparent flex flex-col shadow-lg">
+        <div className="bg-white w-full flex justify-between items-center p-2 border-t border-l border-gray-200">
           <div className="text-sm font-medium">YouTube Player</div>
           <button 
             onClick={() => setShowYoutubePlayer(false)}
