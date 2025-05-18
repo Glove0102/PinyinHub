@@ -127,7 +127,9 @@ export class MemStorage implements IStorage {
       createdAt: now,
       titleChinese: insertSong.titleChinese || null,
       artistChinese: insertSong.artistChinese || null,
-      genre: insertSong.genre || null
+      genre: insertSong.genre || null,
+      youtubeLink: insertSong.youtubeLink || null,
+      spotifyLink: insertSong.spotifyLink || null
     };
     this.songs.set(id, song);
     return song;
@@ -216,6 +218,8 @@ export class DatabaseStorage implements IStorage {
       simplifiedLyrics: insertSong.lyrics,
       pinyinLyrics: [],
       englishLyrics: [],
+      youtubeLink: insertSong.youtubeLink || null,
+      spotifyLink: insertSong.spotifyLink || null,
       views: 0
     };
     
