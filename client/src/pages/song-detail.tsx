@@ -179,14 +179,14 @@ export default function SongDetail() {
         {/* Song content */}
         <div className="bg-white rounded-xl shadow-md overflow-hidden mb-8">
           <div className="p-6 md:p-8">
-            {/* Song tabs */}
-            <SongTabs song={song} />
-            
             {/* Media Links */}
             <MediaLinks 
               youtubeLink={song.youtubeLink} 
               spotifyLink={song.spotifyLink} 
             />
+            
+            {/* Song tabs */}
+            <SongTabs song={song} />
             
             {/* Actions */}
             <div className="mt-8 flex justify-between items-center">

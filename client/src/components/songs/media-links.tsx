@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Music, Youtube } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Music, Youtube, X } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 
 interface MediaLinksProps {
   youtubeLink?: string | null;
@@ -9,8 +9,9 @@ interface MediaLinksProps {
 }
 
 export function MediaLinks({ youtubeLink, spotifyLink }: MediaLinksProps) {
-  const [activeDialog, setActiveDialog] = useState<"youtube" | "spotify" | null>(null);
-
+  const [activeDialog, setActiveDialog] = useState<"spotify" | null>(null);
+  const [showYoutubePlayer, setShowYoutubePlayer] = useState(false);
+  
   // Check if any media links are available
   const hasMediaLinks = youtubeLink || spotifyLink;
   
@@ -47,109 +48,109 @@ export function MediaLinks({ youtubeLink, spotifyLink }: MediaLinksProps) {
   const youtubeVideoId = youtubeLink ? getYoutubeVideoId(youtubeLink) : null;
   const spotifyTrackId = spotifyLink ? getSpotifyTrackId(spotifyLink) : null;
 
-  return (
-    <div className="mt-6">
-      <h3 className="text-lg font-medium mb-3">Listen to this song</h3>
-      <div className="flex flex-wrap gap-2">
-        {youtubeLink && (
-          <Dialog open={activeDialog === 'youtube'} onOpenChange={(open) => setActiveDialog(open ? 'youtube' : null)}>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="sm" className="flex items-center">
-                <Youtube className="h-4 w-4 mr-2 text-red-600" /> 
-                YouTube
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[800px]">
-              <DialogHeader>
-                <DialogTitle>Watch on YouTube</DialogTitle>
-              </DialogHeader>
-              <div className="aspect-video w-full mt-4">
-                {youtubeVideoId ? (
-                  <iframe 
-                    width="100%" 
-                    height="100%" 
-                    src={`https://www.youtube.com/embed/${youtubeVideoId}`}
-                    title="YouTube video player" 
-                    frameBorder="0" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                    allowFullScreen>
-                  </iframe>
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                    <a 
-                      href={youtubeLink} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:underline"
-                    >
-                      Open YouTube video
-                    </a>
-                  </div>
-                )}
-              </div>
-              <div className="mt-4 text-center">
-                <a 
-                  href={youtubeLink} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-sm text-blue-600 hover:underline"
-                >
-                  Open in YouTube app
-                </a>
-              </div>
-            </DialogContent>
-          </Dialog>
-        )}
-
-        {spotifyLink && (
-          <Dialog open={activeDialog === 'spotify'} onOpenChange={(open) => setActiveDialog(open ? 'spotify' : null)}>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="sm" className="flex items-center">
-                <Music className="h-4 w-4 mr-2 text-green-600" /> 
-                Spotify
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Listen on Spotify</DialogTitle>
-              </DialogHeader>
-              <div className="w-full h-[380px] mt-4">
-                {spotifyTrackId ? (
-                  <iframe 
-                    src={`https://open.spotify.com/embed/track/${spotifyTrackId}`}
-                    width="100%" 
-                    height="100%" 
-                    frameBorder="0" 
-                    allow="encrypted-media"
-                    loading="lazy">
-                  </iframe>
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                    <a 
-                      href={spotifyLink} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:underline"
-                    >
-                      Open Spotify track
-                    </a>
-                  </div>
-                )}
-              </div>
-              <div className="mt-4 text-center">
-                <a 
-                  href={spotifyLink} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-sm text-blue-600 hover:underline"
-                >
-                  Open in Spotify app
-                </a>
-              </div>
-            </DialogContent>
-          </Dialog>
-        )}
+  // YouTube floating player component
+  const FloatingYouTubePlayer = () => {
+    if (!showYoutubePlayer || !youtubeVideoId) return null;
+    
+    return (
+      <div className="fixed bottom-0 left-0 right-0 h-[40vh] z-50 bg-transparent flex flex-col">
+        <div className="bg-white w-full flex justify-between items-center p-2 border-t border-gray-200">
+          <div className="text-sm font-medium">YouTube Player</div>
+          <button 
+            onClick={() => setShowYoutubePlayer(false)}
+            className="p-1 hover:bg-gray-100 rounded-full"
+          >
+            <X size={16} />
+          </button>
+        </div>
+        <div className="flex-1 w-full bg-black">
+          <iframe 
+            width="100%" 
+            height="100%" 
+            src={`https://www.youtube.com/embed/${youtubeVideoId}?autoplay=1`}
+            title="YouTube video player" 
+            frameBorder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowFullScreen
+          />
+        </div>
       </div>
-    </div>
+    );
+  };
+
+  return (
+    <>
+      <div className="mt-6">
+        <h3 className="text-lg font-medium mb-3">Listen to this song</h3>
+        <div className="flex flex-wrap gap-2">
+          {youtubeLink && (
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="flex items-center"
+              onClick={() => setShowYoutubePlayer(true)}
+            >
+              <Youtube className="h-4 w-4 mr-2 text-red-600" /> 
+              YouTube
+            </Button>
+          )}
+
+          {spotifyLink && (
+            <Dialog open={activeDialog === 'spotify'} onOpenChange={(open) => setActiveDialog(open ? 'spotify' : null)}>
+              <DialogTrigger asChild>
+                <Button variant="outline" size="sm" className="flex items-center">
+                  <Music className="h-4 w-4 mr-2 text-green-600" /> 
+                  Spotify
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Listen on Spotify</DialogTitle>
+                  <DialogDescription>
+                    Play this track on Spotify while browsing the lyrics
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="w-full h-[380px] mt-4">
+                  {spotifyTrackId ? (
+                    <iframe 
+                      src={`https://open.spotify.com/embed/track/${spotifyTrackId}`}
+                      width="100%" 
+                      height="100%" 
+                      frameBorder="0" 
+                      allow="encrypted-media"
+                      loading="lazy">
+                    </iframe>
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                      <a 
+                        href={spotifyLink} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:underline"
+                      >
+                        Open Spotify track
+                      </a>
+                    </div>
+                  )}
+                </div>
+                <div className="mt-4 text-center">
+                  <a 
+                    href={spotifyLink} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-sm text-blue-600 hover:underline"
+                  >
+                    Open in Spotify app
+                  </a>
+                </div>
+              </DialogContent>
+            </Dialog>
+          )}
+        </div>
+      </div>
+      
+      {/* Floating YouTube player */}
+      <FloatingYouTubePlayer />
+    </>
   );
 }
