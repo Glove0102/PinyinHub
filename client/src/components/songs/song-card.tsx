@@ -55,14 +55,14 @@ export function SongCard({ song }: SongCardProps) {
         
         {/* Display Chinese artist with English below */}
         {song.artistChinese && (
-          <Link href={`/artists/${encodeURIComponent(song.artist)}`} className="text-sm text-primary-600 mb-1 hover:text-primary-700 block">
+          <p className="text-sm text-primary-600 mb-1">
             {song.artistChinese}
-          </Link>
+          </p>
         )}
         {/* Always show English artist */}
-        <Link href={`/artists/${encodeURIComponent(song.artist)}`} className={`text-xs ${song.artistChinese ? 'text-gray-500 hover:text-gray-700' : 'text-primary-600 hover:text-primary-700'} mb-2 block`}>
+        <p className={`text-xs ${song.artistChinese ? 'text-gray-500' : 'text-primary-600'} mb-2`}>
           {song.artist}
-        </Link>
+        </p>
         
         <div className="flex justify-between items-center">
           <span className="text-xs text-gray-500 flex items-center">
@@ -81,5 +81,3 @@ export function SongCard({ song }: SongCardProps) {
     </Card>
   );
 }
-
-export default SongCard;

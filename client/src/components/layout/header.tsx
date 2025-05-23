@@ -35,9 +35,6 @@ export function Header() {
               <Link href="/browse" className={`px-3 py-2 text-sm font-medium ${location === "/browse" ? "text-primary hover:text-primary-600" : "text-gray-700 hover:text-primary"}`}>
                 Browse Songs
               </Link>
-              <Link href="/artists" className={`px-3 py-2 text-sm font-medium ${location === "/artists" || location.startsWith("/artists/") ? "text-primary hover:text-primary-600" : "text-gray-700 hover:text-primary"}`}>
-                Artists
-              </Link>
               {user && user.username === 'glove' && (
                 <Link href="/admin" className={`px-3 py-2 text-sm font-medium ${location === "/admin" ? "text-primary hover:text-primary-600" : "text-gray-700 hover:text-primary"}`}>
                   Admin
@@ -133,8 +130,8 @@ export function Header() {
             <Link href="/browse" className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-md">
               Browse Songs
             </Link>
-            <Link href="/artists" className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-md">
-              Artists
+            <Link href="/about" className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-md">
+              About
             </Link>
             {user && user.username === 'glove' && (
               <Link href="/admin" className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-md">
