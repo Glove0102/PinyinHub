@@ -47,6 +47,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get all artists with statistics
+  app.get("/api/artists", async (req, res) => {
+    try {
+      const artists = await storage.getArtists();
+      res.json(artists);
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching artists" });
+    }
+  });
+
+  // Get songs by artist
+  app.get("/api/artists/:name/songs", async (req, res) => {
+    try {
+      const artistName = decodeURIComponent(req.params.name);
+      const songs = await storage.getSongsByArtist(artistName);
+      res.json(songs);
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching songs by artist" });
+    }
+  });
+
   // Get song by ID
   app.get("/api/songs/:id", async (req, res) => {
     try {

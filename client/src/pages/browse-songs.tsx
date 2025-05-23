@@ -5,7 +5,8 @@ import { Footer } from "@/components/layout/footer";
 import { SongCard } from "@/components/songs/song-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Loader2, Search } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Loader2, Search, Users } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { Song } from "@shared/schema";
 import { useAuth } from "@/hooks/use-auth";
@@ -13,6 +14,7 @@ import { useAuth } from "@/hooks/use-auth";
 export default function BrowseSongs() {
   const [searchTerm, setSearchTerm] = useState("");
   const [genreFilter, setGenreFilter] = useState<string>("all");
+  const [artistFilter, setArtistFilter] = useState<string>("all");
   const [page, setPage] = useState(1);
   const [location] = useLocation();
   const { user } = useAuth();
@@ -88,10 +90,26 @@ export default function BrowseSongs() {
       : [`/api/songs?limit=${ITEMS_PER_PAGE * page}&offset=0`],
   });
 
-  // Filter songs by genre if necessary
-  const filteredSongs = songs && genreFilter !== "all"
-    ? songs.filter(song => song.genre === genreFilter)
-    : songs;
+  // Fetch artists for filter dropdown
+  const { data: artists } = useQuery<Array<{ artist: string; artistChinese: string | null; songCount: number; totalViews: number }>>({
+    queryKey: ["artists"],
+    queryFn: async () => {
+      const res = await fetch("/api/artists");
+      if (!res.ok) throw new Error("Failed to fetch artists");
+      return res.json();
+    },
+  });
+
+  // Filter songs by genre and artist
+  let filteredSongs = songs;
+  if (filteredSongs && genreFilter !== "all") {
+    filteredSongs = filteredSongs.filter(song => song.genre === genreFilter);
+  }
+  if (filteredSongs && artistFilter !== "all") {
+    filteredSongs = filteredSongs.filter(song => 
+      song.artist === artistFilter || song.artistChinese === artistFilter
+    );
+  }
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -100,6 +118,11 @@ export default function BrowseSongs() {
 
   const handleGenreClick = (genre: string) => {
     setGenreFilter(genre);
+    setPage(1); // Reset to first page when changing filters
+  };
+
+  const handleArtistChange = (artist: string) => {
+    setArtistFilter(artist);
     setPage(1); // Reset to first page when changing filters
   };
 
@@ -135,56 +158,77 @@ export default function BrowseSongs() {
           </form>
         </div>
         
-        {/* Genre filters */}
-        <div className="flex space-x-2 mb-6 overflow-x-auto pb-2">
-          <Button 
-            variant={genreFilter === "all" ? "default" : "outline"}
-            size="sm"
-            onClick={() => handleGenreClick("all")}
-            className="whitespace-nowrap"
-          >
-            All
-          </Button>
-          <Button 
-            variant={genreFilter === "pop" ? "default" : "outline"}
-            size="sm"
-            onClick={() => handleGenreClick("pop")}
-            className="whitespace-nowrap"
-          >
-            Pop
-          </Button>
-          <Button 
-            variant={genreFilter === "rock" ? "default" : "outline"}
-            size="sm"
-            onClick={() => handleGenreClick("rock")}
-            className="whitespace-nowrap"
-          >
-            Rock
-          </Button>
-          <Button 
-            variant={genreFilter === "folk" ? "default" : "outline"}
-            size="sm"
-            onClick={() => handleGenreClick("folk")}
-            className="whitespace-nowrap"
-          >
-            Folk
-          </Button>
-          <Button 
-            variant={genreFilter === "rap" ? "default" : "outline"}
-            size="sm"
-            onClick={() => handleGenreClick("rap")}
-            className="whitespace-nowrap"
-          >
-            Rap/Hip-Hop
-          </Button>
-          <Button 
-            variant={genreFilter === "classical" ? "default" : "outline"}
-            size="sm"
-            onClick={() => handleGenreClick("classical")}
-            className="whitespace-nowrap"
-          >
-            Classical
-          </Button>
+        {/* Filters */}
+        <div className="flex flex-col lg:flex-row gap-4 mb-6">
+          {/* Artist filter */}
+          <div className="flex items-center gap-2">
+            <Users className="w-4 h-4 text-gray-500" />
+            <Select value={artistFilter} onValueChange={handleArtistChange}>
+              <SelectTrigger className="w-48">
+                <SelectValue placeholder="Filter by artist" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Artists</SelectItem>
+                {artists?.map((artist) => (
+                  <SelectItem key={artist.artist} value={artist.artist}>
+                    {artist.artistChinese ? `${artist.artistChinese} (${artist.artist})` : artist.artist}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Genre filters */}
+          <div className="flex space-x-2 overflow-x-auto pb-2">
+            <Button 
+              variant={genreFilter === "all" ? "default" : "outline"}
+              size="sm"
+              onClick={() => handleGenreClick("all")}
+              className="whitespace-nowrap"
+            >
+              All Genres
+            </Button>
+            <Button 
+              variant={genreFilter === "pop" ? "default" : "outline"}
+              size="sm"
+              onClick={() => handleGenreClick("pop")}
+              className="whitespace-nowrap"
+            >
+              Pop
+            </Button>
+            <Button 
+              variant={genreFilter === "rock" ? "default" : "outline"}
+              size="sm"
+              onClick={() => handleGenreClick("rock")}
+              className="whitespace-nowrap"
+            >
+              Rock
+            </Button>
+            <Button 
+              variant={genreFilter === "folk" ? "default" : "outline"}
+              size="sm"
+              onClick={() => handleGenreClick("folk")}
+              className="whitespace-nowrap"
+            >
+              Folk
+            </Button>
+            <Button 
+              variant={genreFilter === "rap" ? "default" : "outline"}
+              size="sm"
+              onClick={() => handleGenreClick("rap")}
+              className="whitespace-nowrap"
+            >
+              Rap/Hip-Hop
+            </Button>
+            <Button 
+              variant={genreFilter === "classical" ? "default" : "outline"}
+              size="sm"
+              onClick={() => handleGenreClick("classical")}
+              className="whitespace-nowrap"
+            >
+              Classical
+            </Button>
+          </div>
         </div>
         
         {/* Songs grid */}

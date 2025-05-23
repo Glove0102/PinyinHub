@@ -24,6 +24,10 @@ export interface IStorage {
   updateSong(id: number, song: Partial<Song>): Promise<Song | undefined>;
   incrementSongViews(id: number): Promise<void>;
   
+  // Artist methods
+  getArtists(): Promise<Array<{ artist: string; artistChinese: string | null; songCount: number; totalViews: number }>>;
+  getSongsByArtist(artistName: string): Promise<Song[]>;
+  
   // Session store
   sessionStore: any;
 }
@@ -151,6 +155,37 @@ export class MemStorage implements IStorage {
       this.songs.set(id, song);
     }
   }
+
+  async getArtists(): Promise<Array<{ artist: string; artistChinese: string | null; songCount: number; totalViews: number }>> {
+    const artistStats = new Map<string, { artist: string; artistChinese: string | null; songCount: number; totalViews: number }>();
+    
+    Array.from(this.songs.values()).forEach(song => {
+      const key = song.artist.toLowerCase();
+      if (artistStats.has(key)) {
+        const stats = artistStats.get(key)!;
+        stats.songCount++;
+        stats.totalViews += song.views || 0;
+      } else {
+        artistStats.set(key, {
+          artist: song.artist,
+          artistChinese: song.artistChinese,
+          songCount: 1,
+          totalViews: song.views || 0
+        });
+      }
+    });
+    
+    return Array.from(artistStats.values()).sort((a, b) => b.songCount - a.songCount);
+  }
+
+  async getSongsByArtist(artistName: string): Promise<Song[]> {
+    return Array.from(this.songs.values())
+      .filter(song => 
+        song.artist.toLowerCase() === artistName.toLowerCase() ||
+        (song.artistChinese && song.artistChinese === artistName)
+      )
+      .sort((a, b) => (b.views || 0) - (a.views || 0));
+  }
 }
 
 export class DatabaseStorage implements IStorage {
@@ -244,6 +279,30 @@ export class DatabaseStorage implements IStorage {
         views: sql`${songs.views} + 1`
       })
       .where(eq(songs.id, id));
+  }
+
+  async getArtists(): Promise<Array<{ artist: string; artistChinese: string | null; songCount: number; totalViews: number }>> {
+    const result = await db
+      .select({
+        artist: songs.artist,
+        artistChinese: songs.artistChinese,
+        songCount: sql<number>`count(*)`,
+        totalViews: sql<number>`sum(coalesce(${songs.views}, 0))`
+      })
+      .from(songs)
+      .groupBy(songs.artist, songs.artistChinese)
+      .orderBy(sql`count(*) desc`);
+    
+    return result;
+  }
+
+  async getSongsByArtist(artistName: string): Promise<Song[]> {
+    return db.select().from(songs).where(
+      or(
+        eq(songs.artist, artistName),
+        eq(songs.artistChinese, artistName)
+      )
+    ).orderBy(desc(songs.views));
   }
 }
 
