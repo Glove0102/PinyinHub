@@ -13,7 +13,7 @@ import AuthPage from "@/pages/auth-page";
 import SongDetail from "@/pages/song-detail";
 import AddSong from "@/pages/add-song";
 import BrowseSongs from "@/pages/browse-songs";
-import AdminPage from "@/pages/admin";
+import PronunciationGuide from './pages/pronunciation-guide';
 
 function Router() {
   return (
@@ -24,6 +24,7 @@ function Router() {
       <Route path="/browse" component={BrowseSongs} />
       <ProtectedRoute path="/add-song" component={AddSong} />
       <ProtectedRoute path="/admin" component={AdminPage} />
+      <Route path="/pronunciation-guide" component={PronunciationGuide} />
       <Route component={NotFound} />
     </Switch>
   );
