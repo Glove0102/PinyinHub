@@ -81,7 +81,7 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                <a href="/pronunciation-guide" className="text-gray-400 hover:text-white transition-colors">
                   Pronunciation Guide
                 </a>
               </li>

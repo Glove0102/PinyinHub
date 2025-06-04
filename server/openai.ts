@@ -25,11 +25,13 @@ export async function processChineseLyrics(lyrics: string): Promise<{
           role: "system",
           content: 
             "You are a Chinese language expert specializing in transliteration and translation. " +
-            "Convert Chinese lyrics into simplified characters, pinyin with tone marks, and English translation. " +
+            "You will receive lyrics that may include both Chinese and English lines. " +
+            "Convert only the Chinese parts into simplified characters, pinyin with tone marks, and English translation. " +
+            "For lines that are already in English, do not change or translate them—just include them as-is in all outputs. " +
             "Format your response as valid JSON with these properties: " +
-            "1. simplifiedLyrics: A string with the lyrics in simplified Chinese." +
-            "2. pinyinLyrics: An array of objects with {pinyin: string, chinese: string} for each line." +
-            "3. englishLyrics: An array of English translation strings for each line."
+            "1. simplifiedLyrics: A string with all lyrics in simplified Chinese or original English, preserving original line order. " +
+            "2. pinyinLyrics: An array of objects with {pinyin: string, chinese: string} for each line. For English lines, use {pinyin: null, chinese: line}. " +
+            "3. englishLyrics: An array of English translation strings for each line. For original English lines, repeat the line as-is."
         },
         {
           role: "user",
