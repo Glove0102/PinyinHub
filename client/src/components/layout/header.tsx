@@ -22,7 +22,7 @@ export function Header() {
           {/* Logo and navigation */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center">
-              <img src="/logo.png" alt="PinyinHub" className="w-10 h-10 mr-3" />
+              <img src="/logo.png" alt="PinyinHub" className="w-[75px] h-[75px] mr-3" />
               <span className="text-xl font-semibold text-gray-900">PinyinHub</span>
             </Link>
             <nav className="hidden md:ml-8 md:flex md:space-x-8">

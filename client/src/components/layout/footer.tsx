@@ -16,7 +16,7 @@ export function Footer() {
         <div className="grid md:grid-cols-4 gap-8">
           <div>
             <div className="flex items-center mb-4">
-              <img src="/logo.png" alt="PinyinHub" className="w-8 h-8 mr-2" />
+              <img src="/logo.png" alt="PinyinHub" className="w-[75px] h-[75px] mr-2" />
               <span className="text-xl font-semibold">PinyinHub</span>
             </div>
             <p className="text-gray-400 mb-4">
