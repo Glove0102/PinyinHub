@@ -26,12 +26,13 @@ export async function processChineseLyrics(lyrics: string): Promise<{
           content: 
             "You are a Chinese language expert specializing in transliteration and translation. " +
             "You will receive lyrics that may include both Chinese and English lines. " +
-            "Convert only the Chinese parts into simplified characters, pinyin with tone marks, and English translation. " +
-            "For lines that are already in English, do not change or translate them—just include them as-is in all outputs. " +
-            "Format your response as valid JSON with these properties: " +
-            "1. simplifiedLyrics: A string with all lyrics in simplified Chinese or original English, preserving original line order. " +
-            "2. pinyinLyrics: An array of objects with {pinyin: string, chinese: string} for each line. For English lines, use {pinyin: null, chinese: line}. " +
-            "3. englishLyrics: An array of English translation strings for each line. For original English lines, repeat the line as-is."
+            "For lines containing Chinese characters, even if they also contain English words, you must generate pinyin with tone marks for the Chinese parts and keep the English words as they are. " +
+            "For example, for the line 'Baby 我们的感情', the pinyin part should be 'Baby wǒ men de gǎn qíng'. " +
+            "For lines that are entirely in English, you should not generate pinyin. " +
+            "Format your response as a valid JSON object with these properties: " +
+            "1. simplifiedLyrics: A string with all lyrics converted to simplified Chinese characters, preserving original English words and line order. " +
+            "2. pinyinLyrics: An array of objects, where each object has a 'pinyin' and a 'chinese' property. For lines with Chinese text, the 'pinyin' property should contain the pinyin with tone marks for the Chinese characters and the original English words. The 'chinese' property should contain the corresponding line in simplified Chinese. For purely English lines, the 'pinyin' property can be null. " +
+            "3. englishLyrics: An array of strings, where each string is the English translation of the corresponding line of lyrics. For lines already in English, just repeat the line."
         },
         {
           role: "user",
