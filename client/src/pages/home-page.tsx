@@ -13,6 +13,9 @@ import { Song } from "@shared/schema";
 const SongListItem = ({ song }: { song: Song }) => (
     <div className="py-2">
         <Link href={`/songs/${song.id}`} className="font-semibold text-gray-800 hover:text-primary">{song.titleChinese || song.title}</Link>
+        {song.titleChinese && song.title !== song.titleChinese && (
+            <p className="text-sm text-gray-500">{song.title}</p>
+        )}
         <div className="text-sm text-gray-500">
             <Link href={`/browse?search=${encodeURIComponent(song.artist)}`} className="hover:underline">
                 {song.artistChinese || song.artist}
@@ -27,7 +30,7 @@ export default function HomePage() {
   useEffect(() => {
     // Set page title
     document.title = "PinyinHub - Learn Chinese Through Music";
-
+    
     // Update meta description
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
@@ -40,7 +43,7 @@ export default function HomePage() {
       meta.content = "PinyinHub helps you understand Chinese songs with pinyin transliteration and English translations. Learn Chinese through music.";
       document.head.appendChild(meta);
     }
-
+    
     // Add Open Graph tags for social media sharing
     const setMetaTag = (property: string, content: string) => {
       let meta = document.querySelector(`meta[property="${property}"]`);
@@ -53,7 +56,7 @@ export default function HomePage() {
         document.head.appendChild(meta);
       }
     };
-
+    
     setMetaTag('og:title', "PinyinHub - Learn Chinese Through Music");
     setMetaTag('og:description', "Learn Chinese through music with lyrics, pinyin, and English translations");
     setMetaTag('og:image', "https://images.unsplash.com/photo-1507838153414-b4b713384a76?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=600");
@@ -66,7 +69,7 @@ export default function HomePage() {
     queryKey: ["/api/songs"],
     select: (data) => data.length > 0 ? [data[0]] : []
   });
-
+  
   // Fetch all songs for the new list view
   const { data: allSongs, isLoading: areAllSongsLoading } = useQuery<Song[]>({
     queryKey: ["/api/songs?limit=100"], // Fetch more songs
@@ -87,7 +90,7 @@ export default function HomePage() {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-
+      
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow">
         {/* Hero Section */}
         <section className="mb-12">
@@ -118,7 +121,7 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-
+        
         {/* Featured Song */}
         <section className="mb-16">
           <div className="flex items-center justify-between mb-6">
@@ -130,7 +133,7 @@ export default function HomePage() {
               </svg>
             </Link>
           </div>
-
+          
           <div className="bg-white rounded-xl shadow-md overflow-hidden">
             {isFeaturedLoading ? (
               <div className="flex justify-center items-center h-64">
@@ -150,19 +153,19 @@ export default function HomePage() {
                     <p className="text-white text-sm">{featuredSong[0].artistChinese || featuredSong[0].artist}</p>
                   </div>
                 </div>
-
+                
                 <div className="p-6 md:p-8 md:w-2/3">
                   <div className="hidden md:block mb-4">
                     <h3 className="text-2xl font-bold text-gray-900">{featuredSong[0].titleChinese || featuredSong[0].title}</h3>
                     <p className="text-lg text-primary mb-1">{featuredSong[0].title !== featuredSong[0].titleChinese ? featuredSong[0].title : ''}</p>
                     <p className="text-gray-700">{featuredSong[0].artistChinese || featuredSong[0].artist}</p>
                   </div>
-
+                  
                   {/* Limit display height with max-h-60 and add overflow-y-auto for scrolling if needed */}
                   <div className="max-h-60 overflow-y-auto">
                     <SongTabs song={featuredSong[0]} />
                   </div>
-
+                  
                   <div className="mt-6 flex justify-between items-center">
                     <Button variant="ghost" size="sm" className="text-gray-600 hover:text-primary">
                       <Heart className="h-4 w-4 mr-1" /> Favorite
@@ -186,7 +189,7 @@ export default function HomePage() {
             )}
           </div>
         </section>
-
+        
         {/* New All Songs Section */}
         <section id="all-songs" className="mb-16">
           <div className="flex items-center justify-between mb-6">
@@ -270,10 +273,10 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-
-
+        
+        
       </main>
-
+      
       <Footer />
     </div>
   );

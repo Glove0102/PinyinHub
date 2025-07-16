@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation } from "wouter";
-import { Loader2, Search, List, ArrowUpDown } from "lucide-react";
+import { Loader2, Search } from "lucide-react";
 
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
@@ -71,25 +71,20 @@ export default function BrowseSongs() {
 
   // Fetch songs with pagination and sorting
   const { data: songs, isLoading, error } = useQuery<Song[]>({
-    queryKey: [`/api/songs?limit=${ITEMS_PER_PAGE}&offset=${(page - 1) * ITEMS_PER_PAGE}&sortBy=${sortBy}&q=${searchTerm}&genre=${genreFilter}`],
-    queryFn: async ({ queryKey }) => {
-      const url = new URL(window.location.origin + queryKey[0]);
-      const res = await fetch(url.toString());
-      if (!res.ok) throw new Error('Network response was not ok');
-      return res.json();
-    },
+      queryKey: isSearching 
+          ? [`/api/songs/search?q=${encodeURIComponent(searchTerm)}`]
+          : [`/api/songs?limit=${ITEMS_PER_PAGE}&offset=${(page - 1) * ITEMS_PER_PAGE}`],
+      queryFn: async ({ queryKey }) => {
+          const url = new URL(window.location.origin + queryKey[0]);
+          const res = await fetch(url.toString());
+          if (!res.ok) throw new Error('Network response was not ok');
+          return res.json();
+      },
   });
   
   // Apply client-side filtering and sorting for simplicity, though this should ideally be done server-side
   const processedSongs = songs?.filter(song => {
       if (genreFilter !== 'all' && song.genre !== genreFilter) return false;
-      if (isSearching) {
-          const lowerSearchTerm = searchTerm.toLowerCase();
-          return song.title.toLowerCase().includes(lowerSearchTerm) ||
-                 (song.titleChinese && song.titleChinese.toLowerCase().includes(lowerSearchTerm)) ||
-                 song.artist.toLowerCase().includes(lowerSearchTerm) ||
-                 (song.artistChinese && song.artistChinese.toLowerCase().includes(lowerSearchTerm));
-      }
       return true;
   }).sort((a, b) => {
       if (sortBy === 'views') return (b.views || 0) - (a.views || 0);
@@ -190,11 +185,13 @@ export default function BrowseSongs() {
             )}
             
             {/* Pagination Controls */}
-            <div className="mt-8 flex justify-between items-center">
-                <Button variant="outline" onClick={() => setPage(p => Math.max(1, p-1))} disabled={page === 1}>Previous</Button>
-                <span className="text-sm text-gray-600">Page {page}</span>
-                <Button variant="outline" onClick={() => setPage(p => p + 1)} disabled={!songs || songs.length < ITEMS_PER_PAGE}>Next</Button>
-            </div>
+            {!isSearching && (
+              <div className="mt-8 flex justify-between items-center">
+                  <Button variant="outline" onClick={() => setPage(p => Math.max(1, p-1))} disabled={page === 1}>Previous</Button>
+                  <span className="text-sm text-gray-600">Page {page}</span>
+                  <Button variant="outline" onClick={() => setPage(p => p + 1)} disabled={!songs || songs.length < ITEMS_PER_PAGE}>Next</Button>
+              </div>
+            )}
           </div>
         </div>
       </main>
